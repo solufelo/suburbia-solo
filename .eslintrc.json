@@ -1,0 +1,12 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[value='font-sans']",
+        "message": "Use 'font-bowlby' instead of 'font-sans' to maintain consistent typography"
+      }
+    ]
+  }
+}

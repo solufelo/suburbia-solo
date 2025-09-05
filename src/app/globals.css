@@ -1,15 +1,12 @@
-@import "tailwindcss";
+/* ===== TAILWIND BASE ===== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* ===== CSS VARIABLES ===== */
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,8 +16,147 @@
   }
 }
 
+/* ===== GLOBAL STYLES ===== */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-DM-mono), monospace;
+  overflow-x: hidden;
+}
+
+/* Force DM Mono font for all text content */
+* {
+  font-family: var(--font-DM-mono), monospace !important;
+  font-feature-settings: normal !important;
+  font-variant: normal !important;
+  font-style: normal !important;
+}
+
+/* Override any font-family declarations - allows Bowlby font to work */
+.font-bowlby,
+.font-bowlby * {
+  font-family: var(--font-bowlby-sc), system-ui, sans-serif !important;
+}
+
+/* Force normal characters for special Unicode */
+* {
+  unicode-bidi: normal !important;
+  direction: ltr !important;
+}
+
+/* ===== CUSTOM UTILITY CLASSES ===== */
+
+/* Background texture pattern used across slices */
+.bg-texture {
+  background-image: url("/bg-texture.webp");
+  background-size: 720px 460px;
+  background-position: center;
+  background-repeat: repeat;
+}
+
+/* Button with cutout effect and hover animations */
+.button-cutout {
+  position: relative;
+  filter: drop-shadow(0 1px 0 #000) drop-shadow(-1px 0 0 #000)
+    drop-shadow(1px 0 0 #000) drop-shadow(0 -1px 0 #000)
+    drop-shadow(8px 8px 0 #000);
+
+  &:hover {
+    filter: drop-shadow(0 1px 0 #000) drop-shadow(-1px 0 0 #000)
+      drop-shadow(1px 0 0 #000) drop-shadow(0 -1px 0 #000)
+      drop-shadow(2px 2px 0 #000);
+  }
+
+  &::before {
+    position: absolute;
+    top: 0;
+    right: calc(100% - 1px);
+    content: "";
+    background: inherit;
+    width: 1rem;
+    height: 100%;
+    clip-path: polygon(
+      23% 19%,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      29% 79%,
+      9% 80%,
+      0 33%
+    );
+  }
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: calc(100% - 1px);
+    content: "";
+    background: inherit;
+    width: 1rem;
+    height: 100%;
+    clip-path: polygon(
+      100% 0,
+      74% 28%,
+      100% 29%,
+      100% 70%,
+      84% 78%,
+      100% 100%,
+      0 100%,
+      0 0
+    );
+}
+}
+
+.stack-layout {
+  display: grid;
+  grid-template-areas: "stack";
+  place-items: center;
+}
+
+.stack-layout > * {
+  grid-area: stack;
+}
+
+.skater-scribble-path {
+  opacity: 0.8;
+  stroke-dasharray: 2300;
+  stroke-dashoffset: -2300;
+  transition: stroke-dashoffset 1s ease-in-out 0.2s;
+  transform-origin: center center;
+}
+
+.skater:hover .skater-scribble-path {
+  stroke-dashoffset: 0;
+}
+
+.slide-in-hidden {
+  opacity: 0;
+  transform: translateX(-100px);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.slide-in-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Squiggle animation for WavyPaths */
+@keyframes squiggle {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(1px) translateY(-0.5px);
+  }
+  50% {
+    transform: translateX(-0.5px) translateY(0.5px);
+  }
+  75% {
+    transform: translateX(0.5px) translateY(-0.25px);
+  }
+}
+
+.animate-squiggle {
+  animation: squiggle 6s ease-in-out infinite;
 }
