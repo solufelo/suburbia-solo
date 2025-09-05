@@ -140,7 +140,6 @@ export default function Preview() {
           onStart={onCameraControlStart}
           smoothTime={0.8}
           dampingFactor={0.05}
-          enableDamping={true}
         />
       </Suspense>
       <Preload all />
