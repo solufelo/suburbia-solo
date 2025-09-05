@@ -11,22 +11,12 @@ export async function Footer() {
   const client = createClient();
   const settings = await client.getSingle("settings");
 
-  // Get skateboard images - try footer_skateboards first, fallback to all skateboards
-  let boardTextureURLs: string[] = [];
-  
-  if (settings.data.footer_skateboards && settings.data.footer_skateboards.length > 0) {
-    // Use the dedicated footer skateboards field if available
-    boardTextureURLs = settings.data.footer_skateboards
-      .map((item) => asImageSrc(item.skateboard, { h: 600 }))
-      .filter((url): url is string => Boolean(url));
-  } else {
-    // Fallback to getting all skateboards if footer_skateboards is not available
-    const skateboards = await client.getAllByType("skateboard");
-    boardTextureURLs = skateboards
-      .map((skateboard) => asImageSrc(skateboard.data.image, { h: 600 }))
-      .filter((url): url is string => Boolean(url))
-      .slice(0, 8); // Limit to 8 boards
-  }
+  // Get skateboard images from all skateboards
+  const skateboards = await client.getAllByType("skateboard");
+  const boardTextureURLs = skateboards
+    .map((skateboard) => asImageSrc(skateboard.data.image, { h: 600 }))
+    .filter((url): url is string => Boolean(url))
+    .slice(0, 8); // Limit to 8 boards
 
   // Skateboard textures loaded
 

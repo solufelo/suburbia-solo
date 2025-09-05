@@ -49,8 +49,10 @@ export function ParallaxImage({
 
       currentPosition.current = { x: newX, y: newY };
 
-      const bgEffect = (bgAnimation.current?.effect as unknown) || null;
-      const fgEffect = (fgAnimation.current?.effect as unknown) || null;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const bgEffect = (bgAnimation.current?.effect as any) || null;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const fgEffect = (fgAnimation.current?.effect as any) || null;
       if (bgEffect && typeof bgEffect.setKeyframes === "function") {
         bgEffect.setKeyframes([{ transform: `translate3d(${newX}px, ${newY}px, 0)` }]);
       } else if (backgroundRef.current) {
@@ -101,12 +103,12 @@ export function ParallaxImage({
     // Initialize Web Animations to avoid inline styles
     if (backgroundRef.current && !bgAnimation.current) {
       try {
-        const effect = new (window as unknown).KeyframeEffect(
+        const effect = new (window as unknown as { KeyframeEffect: typeof KeyframeEffect }).KeyframeEffect(
           backgroundRef.current,
           [{ transform: "translate3d(0px, 0px, 0)" }],
           { duration: 0, fill: "forwards" }
         );
-        bgAnimation.current = new Animation(effect, (document as unknown).timeline);
+        bgAnimation.current = new Animation(effect, (document as unknown as { timeline: AnimationTimeline }).timeline);
         bgAnimation.current.play();
       } catch {
         bgAnimation.current = backgroundRef.current.animate(
@@ -117,12 +119,12 @@ export function ParallaxImage({
     }
     if (foregroundRef.current && !fgAnimation.current) {
       try {
-        const effect = new (window as unknown).KeyframeEffect(
+        const effect = new (window as unknown as { KeyframeEffect: typeof KeyframeEffect }).KeyframeEffect(
           foregroundRef.current,
           [{ transform: "translate3d(0px, 0px, 0)" }],
           { duration: 0, fill: "forwards" }
         );
-        fgAnimation.current = new Animation(effect, (document as unknown).timeline);
+        fgAnimation.current = new Animation(effect, (document as unknown as { timeline: AnimationTimeline }).timeline);
         fgAnimation.current.play();
       } catch {
         fgAnimation.current = foregroundRef.current.animate(
@@ -144,7 +146,7 @@ export function ParallaxImage({
     return () => {
       window.removeEventListener("mousemove", onMouseMove as EventListener);
       window.removeEventListener("touchmove", onTouchMove as EventListener);
-      media.removeEventListener?.("change", onChange as unknown);
+      media.removeEventListener?.("change", onChange as EventListener);
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);

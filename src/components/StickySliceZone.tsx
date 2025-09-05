@@ -2,7 +2,7 @@
 
 import { SliceZone } from "@prismicio/react";
 // import { SliceBundle, CascadeContainer } from "@/components";
-import { SliceLike } from "@prismicio/client";
+import type { SliceLike } from "@prismicio/react";
 import dynamic from "next/dynamic";
 
 // Import components directly to avoid serialization issues
@@ -42,7 +42,8 @@ export function StickySliceZone({
         slices={bundledSlices} 
         components={{
           ...components,
-          text_and_image_bundle: ({ slice }: { slice: unknown }) => (
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          text_and_image_bundle: ({ slice }: { slice: any }) => (
             <div>
               <SliceZone slices={slice.slices} components={components} />
             </div>
@@ -54,24 +55,28 @@ export function StickySliceZone({
 }
 
 // Bundle TextAndImage slices together like the original project
-function bundleTextAndImageSlices(slices: unknown[]) {
-  const res: unknown[] = [];
+function bundleTextAndImageSlices(slices: SliceLike[]): SliceLike[] {
+  const res: SliceLike[] = [];
 
   for (const slice of slices) {
-    if (slice.slice_type !== "text_and_image") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sliceAny = slice as any;
+    if (sliceAny.slice_type !== "text_and_image") {
       res.push(slice);
       continue;
     }
 
-    const bundle = res.at(-1);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const bundle = res.at(-1) as any;
     if (bundle?.slice_type === "text_and_image_bundle") {
       bundle.slices.push(slice);
     } else {
       res.push({
-        id: `${slice.id}-bundle`,
+        id: `${sliceAny.id}-bundle`,
         slice_type: "text_and_image_bundle",
         slices: [slice],
-      });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any);
     }
   }
   return res;

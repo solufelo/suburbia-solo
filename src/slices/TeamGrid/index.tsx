@@ -25,7 +25,8 @@ const TeamGrid: FC<TeamGridProps> = ({ slice }) => {
     async function fetchSkaters() {
       const client = createClient();
       const data = await client.getAllByType("skater");
-      const sorted = [...data].sort((a: unknown, b: unknown) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sorted = [...data].sort((a: any, b: any) => {
         const nameA = `${a?.data?.first_name ?? ""} ${a?.data?.last_name ?? ""}`.trim().toLowerCase();
         const nameB = `${b?.data?.first_name ?? ""} ${b?.data?.last_name ?? ""}`.trim().toLowerCase();
         const aIsSophia = nameA === "sophia castillo";
@@ -70,7 +71,8 @@ const TeamGrid: FC<TeamGridProps> = ({ slice }) => {
       </Heading>
       </SlideIn>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-4">
-        {skaters.map((skater: unknown, index: number) => (
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {skaters.map((skater: any, index: number) => (
           skater?.data?.first_name ? (
             <SlideIn key={skater.id ?? index} delay={index * 0.1}>
               <Skater index={index} skater={skater} />
