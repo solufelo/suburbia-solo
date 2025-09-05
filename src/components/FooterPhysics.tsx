@@ -125,9 +125,9 @@ export function FooterPhysics({
     // Add event listeners to the mouse constraint for proper cleanup
     mouseConstraint.mouse.element.addEventListener('mouseup', () => {
       // Force release the constraint to prevent sticking
-      (mouseConstraint.constraint as any).bodyB = null;
-      (mouseConstraint.constraint as any).pointB = null;
-      (mouseConstraint as any).body = null;
+      (mouseConstraint.constraint as unknown).bodyB = null;
+      (mouseConstraint.constraint as unknown).pointB = null;
+      (mouseConstraint as unknown).body = null;
     });
     
     // Ensure the canvas can receive mouse events and is properly positioned
@@ -148,9 +148,9 @@ export function FooterPhysics({
     // Add global mouse up listener to handle releases outside canvas
     const globalMouseUp = () => {
       if (mouseConstraint.constraint.bodyB) {
-        (mouseConstraint.constraint as any).bodyB = null;
-        (mouseConstraint.constraint as any).pointB = null;
-        (mouseConstraint as any).body = null;
+        (mouseConstraint.constraint as unknown).bodyB = null;
+        (mouseConstraint.constraint as unknown).pointB = null;
+        (mouseConstraint as unknown).body = null;
       }
     };
     

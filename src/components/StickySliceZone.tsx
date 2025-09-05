@@ -1,7 +1,7 @@
 "use client";
 
 import { SliceZone } from "@prismicio/react";
-import { SliceBundle, CascadeContainer } from "@/components";
+// import { SliceBundle, CascadeContainer } from "@/components";
 import { SliceLike } from "@prismicio/client";
 import dynamic from "next/dynamic";
 
@@ -42,7 +42,7 @@ export function StickySliceZone({
         slices={bundledSlices} 
         components={{
           ...components,
-          text_and_image_bundle: ({ slice }: any) => (
+          text_and_image_bundle: ({ slice }: { slice: unknown }) => (
             <div>
               <SliceZone slices={slice.slices} components={components} />
             </div>
@@ -54,8 +54,8 @@ export function StickySliceZone({
 }
 
 // Bundle TextAndImage slices together like the original project
-function bundleTextAndImageSlices(slices: any[]) {
-  const res: any[] = [];
+function bundleTextAndImageSlices(slices: unknown[]) {
+  const res: unknown[] = [];
 
   for (const slice of slices) {
     if (slice.slice_type !== "text_and_image") {

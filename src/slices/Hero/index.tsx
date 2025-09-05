@@ -1,7 +1,6 @@
 import { FC } from "react";
-import { Content, asImageSrc } from "@prismicio/client";
+import { Content } from "@prismicio/client";
 import { SliceComponentProps, PrismicRichText, PrismicText } from "@prismicio/react";
-import { PrismicNextLink } from "@prismicio/next";
 
 import { Bounded } from "@/components/Bounded";
 import { Heading } from "@/components/Heading";
@@ -11,10 +10,10 @@ import { TallLogo } from "./TallLogo";
 import { InteractiveSkateboard } from "./InteractiveSkateboard";
 import { useSkateboard } from "@/contexts/SkateboardContext";
 
-const DEFAULT_DECK_TEXTURE = "/skateboard/Deck.webp";
-const DEFAULT_WHEEL_TEXTURE = "/skateboard/SkateWheel1.png";
-const DEFAULT_TRUCK_COLOR = "#6F6E6A";
-const DEFAULT_BOLT_COLOR = "#6F6E6A";
+// const DEFAULT_DECK_TEXTURE = "/skateboard/Deck.webp";
+// const DEFAULT_WHEEL_TEXTURE = "/skateboard/SkateWheel1.png";
+// const DEFAULT_TRUCK_COLOR = "#6F6E6A";
+// const DEFAULT_BOLT_COLOR = "#6F6E6A";
 
 /**
  * Props for `Hero`.

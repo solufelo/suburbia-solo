@@ -1,4 +1,4 @@
-import { PrismicNextImage, PrismicNextLink } from "@prismicio/next";
+import { PrismicNextLink } from "@prismicio/next";
 import React from "react";
 import { asImageSrc } from "@prismicio/client";
 
