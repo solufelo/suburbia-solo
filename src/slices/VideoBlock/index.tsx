@@ -55,6 +55,7 @@ const VideoBlock = ({ slice }: VideoBlockProps) => {
             src="/image-texture.png"
             alt=""
             fill
+            sizes="100vw"
             className="pointer-events-none object-cover opacity-50"
           />
         </div>
