@@ -47,15 +47,15 @@ export function SuccessClient({ orderId, stripe }: Props) {
           <Kicker index={stripe ? "$" : "✓"} className="anim-fade-up">
             {stripe ? "Stripe test payment" : "Demo order placed"}
           </Kicker>
-          <h1 className="font-display t-mega mt-5 uppercase leading-[0.8]">
+          <h1 className="font-display mt-5 uppercase leading-[0.8]">
             {pendingStripe ? (
               <span className="block overflow-hidden pb-[0.04em]">
-                <span className="anim-rise block">Almost there</span>
+                <span className="anim-rise t-mega block">Almost there</span>
               </span>
             ) : (
               <>
                 <span className="block overflow-hidden pb-[0.04em]">
-                  <span className="anim-rise block">You&apos;re</span>
+                  <span className="anim-rise t-mega block">You&apos;re</span>
                 </span>{" "}
                 <RansomWord word="rolling" animate baseDelay={0.3} className="mt-[0.12em] text-[clamp(2.6rem,7.6vw,7.4rem)]" />
               </>
@@ -119,7 +119,20 @@ export function SuccessClient({ orderId, stripe }: Props) {
                   </span>
                 }
                 total={receipt.subtotal}
-                footer={`For ${receipt.name} · ${receipt.email}`}
+                footer={
+                  <>
+                    For {receipt.name} · {receipt.email}
+                    {/* Stamped at the foot of the receipt, after it has printed. */}
+                    <span
+                      aria-hidden="true"
+                      className="anim-stamp mx-auto mt-5 block w-fit border-[5px] border-double border-brand-orange px-4 py-2 text-center font-display text-[1.9rem] uppercase leading-[0.9] tracking-normal text-brand-orange mix-blend-multiply [--d:1.5s] [--r:-7deg]"
+                    >
+                      Demo
+                      <br />
+                      <span className="text-[1rem]">Nothing charged</span>
+                    </span>
+                  </>
+                }
                 lines={receipt.lines.map((l, i) => ({
                   key: String(i),
                   qty: l.qty,
@@ -146,16 +159,6 @@ export function SuccessClient({ orderId, stripe }: Props) {
               </div>
             )}
           </div>
-            {!stripe ? (
-              <span
-                aria-hidden="true"
-                className="anim-stamp pointer-events-none absolute -bottom-6 -right-4 z-20 sm:-right-8 border-[5px] border-double border-brand-orange px-4 py-2 text-center font-display text-[1.7rem] uppercase leading-[0.9] text-brand-orange mix-blend-multiply [--d:1.3s] [--r:-12deg]"
-              >
-                Demo
-                <br />
-                <span className="text-[1rem]">Nothing charged</span>
-              </span>
-            ) : null}
         </div>
       </div>
     </section>

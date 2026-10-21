@@ -7,7 +7,7 @@ through **Stripe in test mode** or a clearly labelled **mock checkout**.
 
 Live demo (pre-revamp build, until the `revamp` branch is deployed): https://suburbia-solo.netlify.app/
 
-![Product page](revamp-shots/02-product-page.png)
+![Homepage hero](revamp-shots/01-home.png)
 
 ## What it does
 
@@ -75,8 +75,8 @@ and rejects unknown boards, unknown builder options and client-supplied prices.
 
 `src/fixtures/prismic-documents.json` is a snapshot of every published document. The client
 uses it when `PRISMIC_FIXTURES=1`, and falls back to it automatically if the Prismic API cannot
-be reached. Image URLs are rewritten to the copies in `public/Images`, so fixture mode needs no
-Prismic access at all. Refresh it with `npm run snapshot:prismic`.
+be reached. Image URLs are rewritten to web-sized WebP copies in `public/Images/web`
+(`python scripts/build-web-images.py`), so fixture mode needs no Prismic access at all. Refresh it with `npm run snapshot:prismic`.
 
 ### Content model change to push
 
@@ -89,7 +89,7 @@ Machine (`npm run slicemachine` → Push). Until then the product copy and deck 
 
 ```bash
 npm run typecheck
-npm test            # 51 unit + API tests (vitest), offline: fixtures + stubbed Stripe
+npm test            # 71 unit + API tests (vitest), offline: fixtures + stubbed Stripe
 npm run test:e2e    # Playwright: builds into .next-e2e, serves on :4311 with fixtures + mock checkout
 ```
 
@@ -101,9 +101,14 @@ npm run test:e2e    # Playwright: builds into .next-e2e, serves on :4311 with fi
 - `tests/revalidate.test.ts`: the webhook refuses without the right secret.
 - `tests/catalog.test.ts`: fixture API, catalogue normalisation, per-product metadata and JSON-LD
   (and that no ratings are invented).
+- `tests/zine.test.ts`: ransom-note headline tiles (deterministic, so server and browser
+  match), price sticker copy, confirmation sticker ring, builder Shuffle.
+- `tests/checkout-form.test.ts`: the checkout's own field error messages.
 - `e2e/shop.spec.ts`: home → product page (title, canonical, JSON-LD) → add 2 → reload keeps
-  the cart → builder preset → add custom → checkout → demo order confirmed and cart emptied;
-  plus a 390px phone check for sideways scrolling and touch-visible card buttons.
+  the cart → builder preset → add custom → checkout (blank submit shows the designed field
+  errors) → demo order confirmed and cart emptied; the branded 404; and at 390px: no sideways
+  scrolling, touch-visible card buttons, the one-screen builder (tabs, rails, Shuffle), the
+  full-screen menu and the sticky buy bar.
 
 Set `PLAYWRIGHT_CHROMIUM_PATH` if Playwright's own Chromium is not installed.
 
@@ -114,6 +119,7 @@ Set `PLAYWRIGHT_CHROMIUM_PATH` if Playwright's own Chromium is not installed.
 | `npm run textures` | `scripts/build-textures.py` (Python + Pillow): turns the 2056×4096 deck PNGs in `public/Images` into 1028×2048 WebP textures plus cut-out swatches in `public/textures`. About 5-10× smaller, which keeps deck switching instant. |
 | `npm run model` | `scripts/pack-glb.mjs`: packs `assets/model/skateboard.gltf` + `.bin` into `public/skateboard.glb`. |
 | `npm run snapshot:prismic` | Refreshes the content fixtures. |
+| `python scripts/build-web-images.py` | Web-sized WebP copies of every image the fixtures use, in `public/Images/web`. |
 
 The model ships as one `.glb` partly for one fewer request and partly because a network
 filter on the development machine answered any plain-HTTP `*.bin` request with an empty 204,
@@ -124,12 +130,15 @@ WebGL or asset failure shows a fallback instead of taking down the page.
 
 `revamp-shots/` (1440×900 unless noted):
 
-1. `01-home.png`: homepage hero
-2. `02-product-page.png`: product page
-3. `03-cart-drawer.png`: cart drawer with a catalogue board and a custom build
+1. `01-home.png`: homepage hero (the 3D board drops in; tap the dots for tricks)
+2. `02-boards.png`: the rack
+3. `03-product-page.png`: product page
 4. `04-builder.png`: 3D builder
-5. `05-checkout.png`: mock checkout
-6. `06-phone-product.png`: product page at 390×844
+5. `05-cart-drawer.png`: cart drawer with a catalogue board and a custom build
+6. `06-checkout.png`: demo checkout
+7. `07-order-confirmed.png`: confirmation with the printed receipt
+8. `08-404.png`: branded 404
+9. `09-phone-home.png`, `10-phone-builder.png`: 390×844
 
 ## Credits
 

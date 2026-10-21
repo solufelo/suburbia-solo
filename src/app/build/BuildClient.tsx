@@ -61,6 +61,14 @@ export function BuildClient({ preset }: { preset: Partial<BoardDesign> }) {
         </div>
         <SceneLoader />
         <RegistrationMarks />
+        {/* The current graphic's name, printed huge and faint across the stage like an overprint. */}
+        <p
+          key={r.deck.id}
+          aria-hidden="true"
+          className="anim-fade-up pointer-events-none absolute inset-x-6 bottom-[14%] z-[4] hidden select-none font-display text-[clamp(5rem,11vw,11rem)] uppercase leading-[0.8] text-white/[0.06] [--d:0s] lg:block"
+        >
+          {r.deck.name}
+        </p>
 
         <header className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between gap-4 p-4 pt-[max(1rem,env(safe-area-inset-top))] sm:p-6">
           <div className="pointer-events-auto flex items-center gap-4">
