@@ -3,7 +3,7 @@
  * checkout API and the 3D preview all read from here, so an id that is not in
  * these lists can never be bought.
  *
- * Textures are generated from public/Images by scripts/build-textures.py.
+ * Textures are generated from assets/images by scripts/build-textures.py.
  */
 
 export type DeckOption = { id: string; name: string; texture: string; thumb: string };

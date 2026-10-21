@@ -31,7 +31,7 @@ export function ProductCard({
   const lean = LEAN[index % LEAN.length];
   return (
     <article
-      className="group relative flex flex-col"
+      className="group relative flex h-full flex-col"
       data-testid="product-card"
       style={{ "--lean": `${lean}deg`, "--accent": product.accent } as CSSProperties}
     >
@@ -39,11 +39,11 @@ export function ProductCard({
         {/* Paint swatch in the board's accent colour. */}
         <div
           aria-hidden="true"
-          className="absolute inset-[6%_4%] bg-[var(--accent)] transition-transform duration-500 ease-snap [mask-image:url(/Images/paint-background.png)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:100%_100%] [rotate:calc(var(--lean)*-0.6)] group-hover:scale-[1.04]"
+          className="absolute inset-[6%_4%] bg-[var(--accent)] transition-transform duration-500 ease-snap [mask-image:url(/Images/web/paint-background.webp)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:100%_100%] [rotate:calc(var(--lean)*-0.6)] group-hover:scale-[1.04]"
         />
         <div
           aria-hidden="true"
-          className="halftone absolute inset-[14%_12%] text-ink/15 [mask-image:url(/Images/paint-background.png)] [mask-size:100%_100%]"
+          className="halftone absolute inset-[14%_12%] text-ink/15 [mask-image:url(/Images/web/paint-background.webp)] [mask-size:100%_100%]"
         />
         <span aria-hidden="true" className="tape left-1/2 top-[3%] -translate-x-1/2 rotate-[-3deg]" />
         <span aria-hidden="true" className="absolute left-0 top-0 z-[2] font-mono text-xs font-medium text-ink/70">
@@ -78,12 +78,18 @@ export function ProductCard({
             {product.name}
           </Link>
         </h3>
+        {/* Phones drop the label so two-up names stay on one line. */}
         <p className="shrink-0 pt-0.5 font-mono text-[0.7rem] uppercase tracking-widest text-ink/60">
-          <span className="sr-only">Price: {formatPrice(product.price)} · </span>Complete
+          <span className="sr-only">Price: {formatPrice(product.price)}</span>
+          <span aria-hidden="true" className="max-sm:hidden">
+            {" "}
+            Complete
+          </span>
         </p>
       </div>
 
-      <div className="relative z-[2] mt-3 flex flex-wrap items-center gap-x-6 gap-y-1">
+      {/* Pinned to the card's foot so a row's buttons line up even when a name wraps. */}
+      <div className="relative z-[2] mt-auto flex flex-wrap items-center gap-x-6 gap-y-1 pt-3">
         <AddToCartButton product={product} size="sm" compact className="!ml-3.5 !mr-2" />
         <Link
           href={designHref({ deck: product.deck ?? undefined })}

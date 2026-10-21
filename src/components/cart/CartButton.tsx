@@ -52,6 +52,8 @@ export function CartButton({ className, tone = "ink" }: { className?: string; to
           "absolute -right-3 -top-3 grid h-7 min-w-7 place-items-center rounded-full border-2 border-ink px-1 font-mono text-[0.8rem] font-medium tabular-nums leading-none transition-opacity",
           tone === "ink" ? "bg-brand-lime text-ink" : "bg-ink text-brand-lime",
           ready ? "opacity-100" : "opacity-0",
+          // Empty cart: no "0" sticker at all.
+          count === 0 && "!opacity-0",
           bump > 0 && "anim-pop",
         )}
       >

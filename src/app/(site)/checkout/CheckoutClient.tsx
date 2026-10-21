@@ -126,15 +126,14 @@ export function CheckoutClient({ mode, canceled }: Props) {
   return (
     <section className="bg-texture page-top relative overflow-hidden bg-paper pb-[clamp(4rem,8vw,7rem)]">
       <div className="wrap">
-        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
-          <div>
-            <ModeBanner mode={mode} />
-            <h1 className="font-display t-xl mt-6 uppercase">
-              <span className="block overflow-hidden pb-[0.04em]">
-                <span className="anim-rise block">Checkout</span>
-              </span>
-            </h1>
-          </div>
+        {/* Banner, title and progress read as one column, top to bottom. */}
+        <ModeBanner mode={mode} />
+        <h1 className="font-display t-xl mt-6 uppercase">
+          <span className="block overflow-hidden pb-[0.04em]">
+            <span className="anim-rise block">Checkout</span>
+          </span>
+        </h1>
+        <div className="anim-fade-up mt-5 [--d:0.2s]">
           <Steps current={empty ? 0 : 1} />
         </div>
 
@@ -360,7 +359,6 @@ function ModeBanner({ mode }: { mode: CheckoutMode }) {
   if (mode === "stripe-test") {
     return (
       <p className="relative inline-block max-w-2xl -rotate-1 border-2 border-ink bg-brand-lime px-4 py-3 text-sm shadow-[5px_5px_0_#151314]" data-testid="mode-banner">
-        <span aria-hidden="true" className="tape -left-6 -top-3 w-16 rotate-[-30deg]" />
         <strong className="font-display mr-1 text-[1.15rem] uppercase">Stripe test mode.</strong> No real money moves. Pay with the
         test card <code className="bg-white px-1">4242 4242 4242 4242</code>, any future date and any CVC.
       </p>
@@ -375,7 +373,6 @@ function ModeBanner({ mode }: { mode: CheckoutMode }) {
   }
   return (
     <p className="relative inline-block max-w-2xl -rotate-1 border-2 border-ink bg-brand-lime px-4 py-3 text-sm shadow-[5px_5px_0_#151314]" data-testid="mode-banner">
-      <span aria-hidden="true" className="tape -left-6 -top-3 w-16 rotate-[-30deg]" />
       <strong className="font-display mr-1 text-[1.15rem] uppercase">Demo checkout.</strong> This is a portfolio shop: no card is asked
       for, nothing is charged and no order is shipped.
     </p>

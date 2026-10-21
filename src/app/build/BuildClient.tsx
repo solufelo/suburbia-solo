@@ -52,7 +52,7 @@ export function BuildClient({ preset }: { preset: Partial<BoardDesign> }) {
       {/* ---------- Stage ---------- */}
       <section
         aria-label="3D preview of your board"
-        className="relative h-[52svh] shrink-0 bg-[#2b2829] lg:h-full"
+        className="relative min-h-0 grow bg-[#2b2829] lg:h-full"
       >
         <div className="absolute inset-0">
           <CanvasBoundary fallback={<StaticPreview design={design} />}>
@@ -115,13 +115,13 @@ export function BuildClient({ preset }: { preset: Partial<BoardDesign> }) {
       </section>
 
       {/* ---------- Controls ---------- */}
-      <section className="bg-texture flex min-h-0 grow flex-col bg-zinc-900 lg:h-full lg:border-l-2 lg:border-black">
+      <section className="bg-texture flex shrink-0 flex-col bg-zinc-900 lg:h-full lg:min-h-0 lg:border-l-2 lg:border-black">
         <div className="hidden items-center justify-between px-8 pt-6 lg:flex">
           <p className="kicker text-brand-lime">Custom complete</p>
           <CartButton tone="lime" />
         </div>
 
-        <div className="flex min-h-0 grow flex-col lg:block lg:overflow-y-auto lg:px-8 lg:pb-8 lg:pt-3">
+        <div className="lg:min-h-0 lg:grow lg:overflow-y-auto lg:px-8 lg:pb-8 lg:pt-3">
           <div className="hidden lg:block">
             <h1 className="font-display text-[clamp(2.4rem,3.4vw,3.25rem)] uppercase leading-[0.9]">
               Build your <span className="riso [--riso:#ff4fa3]">board</span>
@@ -131,17 +131,7 @@ export function BuildClient({ preset }: { preset: Partial<BoardDesign> }) {
             </p>
             <div aria-hidden="true" className="my-6 h-px bg-white/15" />
           </div>
-          <BoardBuilder
-            mobileFooter={
-              <button
-                type="button"
-                onClick={resetDesign}
-                className="flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-widest text-white/60"
-              >
-                <FaUndo aria-hidden="true" className="size-3" /> Start over
-              </button>
-            }
-          />
+          <BoardBuilder />
           <div className="mt-7 hidden gap-3 lg:flex">
             <ToolButton onClick={() => updateDesign(randomDesign(Math.random, design))} icon={<FaRandom />}>
               Shuffle
@@ -154,20 +144,31 @@ export function BuildClient({ preset }: { preset: Partial<BoardDesign> }) {
 
         <footer className="relative z-20 flex shrink-0 items-center justify-between gap-3 border-t-2 border-black bg-zinc-950 px-4 pb-[max(0.875rem,env(safe-area-inset-bottom))] pt-3.5 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3">
-            <button
-              type="button"
-              onClick={() => updateDesign(randomDesign(Math.random, design))}
-              aria-label="Shuffle: random design"
-              className="grid size-11 shrink-0 place-items-center border-2 border-white/25 text-brand-lime transition-transform duration-300 ease-slap hover:rotate-12 active:scale-90 lg:hidden"
-            >
-              <FaRandom aria-hidden="true" />
-            </button>
+            {/* Phones keep both tools in the bar, under the thumb. */}
+            <div className="flex shrink-0 gap-1.5 lg:hidden">
+              <button
+                type="button"
+                onClick={() => updateDesign(randomDesign(Math.random, design))}
+                aria-label="Shuffle: random design"
+                className="grid size-11 place-items-center border-2 border-white/25 text-brand-lime transition-transform duration-300 ease-slap hover:rotate-12 active:scale-90"
+              >
+                <FaRandom aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={resetDesign}
+                aria-label="Start over"
+                className="grid size-11 place-items-center border-2 border-white/25 text-white/80 transition-transform duration-300 ease-slap hover:-rotate-12 active:scale-90"
+              >
+                <FaUndo aria-hidden="true" />
+              </button>
+            </div>
             <div className="min-w-0">
               <p className="truncate font-mono text-[0.68rem] uppercase tracking-widest text-white/50" title={describeDesign(design)}>
                 <span className="sm:hidden">{r.deck.name}</span>
                 <span className="max-sm:hidden">{r.deck.name} · {r.wheel.name}</span>
               </p>
-              <p className="font-display text-[2rem] leading-none tabular-nums" data-testid="build-price">
+              <p className="font-display text-[1.75rem] leading-none tabular-nums sm:text-[2rem]" data-testid="build-price">
                 {formatPrice(CUSTOM_BOARD_PRICE_CENTS)}
               </p>
             </div>
@@ -177,7 +178,7 @@ export function BuildClient({ preset }: { preset: Partial<BoardDesign> }) {
             color={added ? "lime" : "orange"}
             onClick={addToCart}
             data-testid="build-add"
-            className="!mr-3 shrink-0"
+            className="!mr-3 shrink-0 max-sm:gap-2 max-sm:text-[1.15rem]"
           >
             <span aria-live="polite">{added ? "Added!" : "Add to cart"}</span>
           </Button>

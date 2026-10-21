@@ -22,10 +22,16 @@ const ENVIRONMENT_COLOR = "#2B2829";
 const FOCUS = new THREE.Vector3(-0.35, 0.25, 0.2);
 const REST_OFFSET = new THREE.Vector3(2.2, 1.0, 1.85);
 
-/** Resting camera position: further back on narrow (square) previews. */
+/**
+ * Resting camera position: further back on tablet-wide previews, closer on
+ * phones, where the stage is tall and narrow and the board would otherwise
+ * fill half of it.
+ */
 function restPosition() {
-  const narrow = typeof window !== "undefined" && window.innerWidth < 1024;
-  return REST_OFFSET.clone().multiplyScalar(narrow ? 1.3 : 1).add(FOCUS);
+  const w = typeof window !== "undefined" ? window.innerWidth : 1440;
+  return REST_OFFSET.clone()
+    .multiplyScalar(w < 768 ? 1.05 : w < 1024 ? 1.3 : 1)
+    .add(FOCUS);
 }
 
 // Every option's texture is loaded up front (WebP, ~3 MB in total) so switching

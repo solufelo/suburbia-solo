@@ -7,6 +7,11 @@ test("shop flow: product page, persisted cart, custom board, demo checkout", asy
   await expect(page.getByRole("heading", { level: 1 })).toHaveAccessibleName(/^escape the cul-de-sac$/i);
   const grid = page.locator('[data-slice-type="product_grid"]');
   await expect(grid.getByTestId("product-card")).toHaveCount(4);
+  // The story panels each go somewhere different, not four more "Shop boards".
+  const story = page.locator("#story");
+  await expect(story.getByRole("link", { name: "Open the builder" })).toHaveAttribute("href", "/build");
+  await expect(story.getByRole("link", { name: "Meet the team" })).toHaveAttribute("href", "/#team");
+  await expect(story.getByRole("link", { name: /shop/i })).toHaveCount(1);
   await grid.getByRole("link", { name: "Oni Mask" }).click();
 
   // Product page with its own SEO metadata.
@@ -106,6 +111,9 @@ test.describe("phone UX", () => {
     await expect(page.getByRole("radio", { name: "Pink", exact: true })).toBeHidden();
     await page.getByRole("tab", { name: /Wheels/ }).click();
     await expect(page.getByRole("tab", { name: /Wheels/ })).toHaveAttribute("aria-selected", "true");
+    // The picked (first) wheel sits inside the gutter, not under the screen edge.
+    expect((await page.locator('label[title="Cream"]').boundingBox())!.x).toBeGreaterThanOrEqual(16);
+    await expect(page.getByRole("button", { name: "Start over" })).toBeInViewport();
     // The input is visually hidden under its swatch; tap the swatch like a person would.
     await page.locator('label[title="Pink"]').click();
     await expect(page.getByRole("radio", { name: "Pink", exact: true })).toBeChecked();
@@ -119,6 +127,16 @@ test.describe("phone UX", () => {
 
     await page.getByTestId("build-add").click();
     await expect(page.getByTestId("cart-drawer").getByTestId("cart-line")).toHaveCount(1);
+  });
+
+  test("two-up shop cards keep each row's Add buttons level", async ({ page }) => {
+    await page.goto("/boards");
+    // Offset from each card's top, so a card still sliding in does not skew it.
+    const offsets = await page.getByTestId("product-card").evaluateAll((cards) =>
+      cards.map((c) => c.querySelector('[data-testid^="add-"]')!.getBoundingClientRect().top - c.getBoundingClientRect().top),
+    );
+    expect(offsets.length).toBeGreaterThanOrEqual(4);
+    for (let i = 0; i + 1 < offsets.length; i += 2) expect(Math.abs(offsets[i] - offsets[i + 1])).toBeLessThan(2);
   });
 
   test("full-screen menu and the sticky buy bar on product pages", async ({ page }) => {

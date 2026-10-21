@@ -31,7 +31,7 @@ function currentName(part: Part, design: BoardDesign) {
  * targets, so the whole builder fits on one screen under the 3D preview.
  * Desktop shows every group at once.
  */
-export function BoardBuilder({ mobileFooter }: { mobileFooter?: React.ReactNode }) {
+export function BoardBuilder() {
   const { design, updateDesign } = useSkateboard();
   const [active, setActive] = useState<Part>("deck");
   const set = (key: Part) => (e: React.ChangeEvent<HTMLInputElement>) => updateDesign({ [key]: e.target.value });
@@ -71,9 +71,10 @@ export function BoardBuilder({ mobileFooter }: { mobileFooter?: React.ReactNode 
         ))}
       </div>
 
-      <div className="min-h-0 grow overflow-y-auto px-5 py-5 lg:space-y-7 lg:overflow-visible lg:p-0">
+      {/* Phones: one fixed-height tray for every tab, so the 3D stage above never jumps. */}
+      <div className="flex h-44 flex-col justify-center px-5 lg:block lg:h-auto lg:space-y-7 lg:p-0">
         <OptionGroup part="deck" index={1} active={active} current={currentName("deck", design)}>
-          <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-5 pb-4 pt-3 max-lg:[mask-image:linear-gradient(90deg,transparent,#000_1rem,#000_calc(100%_-_3rem),transparent)] lg:mx-0 lg:grid lg:grid-cols-11 lg:gap-1.5 lg:overflow-visible lg:p-0 lg:pt-3">
+          <div className="no-scrollbar -mx-5 flex scroll-px-5 snap-x snap-mandatory gap-2 overflow-x-auto px-5 pb-2 pt-3 max-lg:[mask-image:linear-gradient(90deg,transparent,#000_1rem,#000_calc(100%_-_3rem),transparent)] lg:mx-0 lg:grid lg:grid-cols-11 lg:gap-1.5 lg:overflow-visible lg:p-0 lg:pt-3">
             {DECKS.map((deck) => (
               <label
                 key={deck.id}
@@ -95,7 +96,7 @@ export function BoardBuilder({ mobileFooter }: { mobileFooter?: React.ReactNode 
                   width={160}
                   height={632}
                   loading="lazy"
-                  className="mx-auto h-36 w-auto transition duration-300 ease-snap group-hover:-translate-y-1 group-hover:-rotate-3 peer-checked:-translate-y-2 peer-checked:rotate-[-4deg] peer-checked:drop-shadow-[5px_7px_0_#d9f154] lg:h-auto lg:w-full"
+                  className="mx-auto h-32 w-auto transition duration-300 ease-snap [filter:drop-shadow(0_0_0.5px_rgb(255_255_255/0.7))_drop-shadow(0_0_1px_rgb(255_255_255/0.35))] group-hover:-translate-y-1 group-hover:-rotate-3 peer-checked:-translate-y-2 peer-checked:rotate-[-4deg] peer-checked:[filter:drop-shadow(5px_7px_0_#d9f154)] lg:h-auto lg:w-full"
                 />
                 <span className="pointer-events-none absolute inset-x-2 bottom-0 h-1 bg-transparent transition peer-checked:bg-brand-lime" />
                 <span className="pointer-events-none absolute -inset-1 rounded-md ring-2 ring-transparent transition peer-focus-visible:ring-brand-lime" />
@@ -105,7 +106,7 @@ export function BoardBuilder({ mobileFooter }: { mobileFooter?: React.ReactNode 
         </OptionGroup>
 
         <OptionGroup part="wheel" index={2} active={active} current={currentName("wheel", design)}>
-          <div className="no-scrollbar -mx-5 flex snap-x gap-3 overflow-x-auto px-5 py-3 max-lg:[mask-image:linear-gradient(90deg,transparent,#000_1rem,#000_calc(100%_-_3rem),transparent)] lg:mx-0 lg:grid lg:grid-cols-9 lg:gap-2 lg:overflow-visible lg:p-0 lg:pt-2">
+          <div className="no-scrollbar -mx-5 flex scroll-px-5 snap-x gap-3 overflow-x-auto px-5 py-3 max-lg:[mask-image:linear-gradient(90deg,transparent,#000_1rem,#000_calc(100%_-_3rem),transparent)] lg:mx-0 lg:grid lg:grid-cols-9 lg:gap-2 lg:overflow-visible lg:p-0 lg:pt-2">
             {WHEELS.map((wheel) => (
               <label key={wheel.id} className="group relative shrink-0 cursor-pointer snap-start p-1" title={wheel.name}>
                 <input
@@ -133,7 +134,6 @@ export function BoardBuilder({ mobileFooter }: { mobileFooter?: React.ReactNode 
 
         <SwatchGroup part="truck" index={3} active={active} value={design.truck} onChange={set("truck")} />
         <SwatchGroup part="bolt" index={4} active={active} value={design.bolt} onChange={set("bolt")} />
-        {mobileFooter ? <div className="pt-2 lg:hidden">{mobileFooter}</div> : null}
       </div>
     </div>
   );

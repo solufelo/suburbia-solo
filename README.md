@@ -29,6 +29,10 @@ Live demo (pre-revamp build, until the `revamp` branch is deployed): https://sub
   so no slice fetches from the browser.
 - **Catalogue.** `src/lib/catalog.ts` turns Prismic `skateboard` documents into plain `Product`
   objects (name, price in cents, image, description, matching builder deck, accent colour).
+- **Homepage copy.** The hero tagline, the board-wall blurb and the four story panels are written
+  in code (`src/slices/*`), not Prismic, because they quote catalogue facts (deck count, wheel size,
+  price) from `customizer-options.ts` and `COMPLETE_SPECS` in `src/lib/site.ts`. Prismic still
+  supplies the headline, the featured boards and each panel's colour, layout and photos.
 - **Builder options.** `src/lib/customizer-options.ts` is the single list of decks, wheels and
   metals. The 3D preview, the cart and the checkout API all validate against it.
 - **Cart.** `src/lib/cart.ts` is a pure reducer plus a defensive `localStorage` parser;
@@ -116,10 +120,13 @@ Set `PLAYWRIGHT_CHROMIUM_PATH` if Playwright's own Chromium is not installed.
 
 | Command | What it does |
 |---|---|
-| `npm run textures` | `scripts/build-textures.py` (Python + Pillow): turns the 2056×4096 deck PNGs in `public/Images` into 1028×2048 WebP textures plus cut-out swatches in `public/textures`. About 5-10× smaller, which keeps deck switching instant. |
+| `npm run textures` | `scripts/build-textures.py` (Python + Pillow): turns the 2056×4096 deck PNGs in `assets/images` into 1028×2048 WebP textures plus cut-out swatches in `public/textures`. About 5-10× smaller, which keeps deck switching instant. |
 | `npm run model` | `scripts/pack-glb.mjs`: packs `assets/model/skateboard.gltf` + `.bin` into `public/skateboard.glb`. |
 | `npm run snapshot:prismic` | Refreshes the content fixtures. |
-| `python scripts/build-web-images.py` | Web-sized WebP copies of every image the fixtures use, in `public/Images/web`. |
+| `python scripts/build-web-images.py` | Web-sized WebP copies of every image the fixtures use (plus the footer photo), in `public/Images/web`. |
+
+The full-size source PNGs (~68 MB) and the source HDRI live in `assets/`, outside `public/`, so they
+are not deployed; the site only serves the WebP copies, the textures and the Draco `.glb`.
 
 The model ships as one `.glb` partly for one fewer request and partly because a network
 filter on the development machine answered any plain-HTTP `*.bin` request with an empty 204,
@@ -139,6 +146,8 @@ WebGL or asset failure shows a fallback instead of taking down the page.
 7. `07-order-confirmed.png`: confirmation with the printed receipt
 8. `08-404.png`: branded 404
 9. `09-phone-home.png`, `10-phone-builder.png`: 390×844
+10. `11-home-story.png`: the story's parts panel (dimensioned deck + spec strip)
+11. `12-phone-shop.png`, `13-phone-404.png`: 390×844
 
 ## Credits
 

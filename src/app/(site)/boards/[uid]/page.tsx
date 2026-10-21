@@ -15,6 +15,7 @@ import { getProduct, getProducts } from "@/lib/catalog";
 import { findDeck } from "@/lib/customizer-options";
 import { formatPrice } from "@/lib/money";
 import { productJsonLd, productMetadata } from "@/lib/seo";
+import { COMPLETE_SPECS } from "@/lib/site";
 
 type Params = { params: Promise<{ uid: string }> };
 
@@ -29,12 +30,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return productMetadata(product);
 }
 
-// Fictional but realistic spec sheet shared by every complete.
+const { deck: D, grip, trucks, wheels } = COMPLETE_SPECS;
 const SPECS = (name: string) => [
-  ["Deck", `${name} graphic, 7-ply maple, 8.0″ × 31.75″`],
-  ["Grip", "Black, already applied"],
-  ["Trucks", "139 mm, baseplates and bolts"],
-  ["Wheels", "53 mm, 99A, bearings fitted"],
+  ["Deck", `${name} graphic, ${D.plies}-ply ${D.wood}, ${D.size}`],
+  ["Grip", grip],
+  ["Trucks", `${trucks.mm} mm, ${trucks.note}`],
+  ["Wheels", `${wheels.mm} mm, ${wheels.duro}, ${wheels.note}`],
 ];
 
 export default async function ProductPage({ params }: Params) {
@@ -80,11 +81,11 @@ export default async function ProductPage({ params }: Params) {
             >
               <div
                 aria-hidden="true"
-                className="absolute inset-[3%_2%] rotate-[3deg] bg-[var(--accent)] [mask-image:url(/Images/paint-background.png)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:100%_100%]"
+                className="absolute inset-[3%_2%] rotate-[3deg] bg-[var(--accent)] [mask-image:url(/Images/web/paint-background.webp)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:100%_100%]"
               />
               <div
                 aria-hidden="true"
-                className="halftone absolute inset-[10%_8%] -rotate-[6deg] text-ink/20 [mask-image:url(/Images/paint-background.png)] [mask-size:100%_100%]"
+                className="halftone absolute inset-[10%_8%] -rotate-[6deg] text-ink/20 [mask-image:url(/Images/web/paint-background.webp)] [mask-size:100%_100%]"
               />
               <span aria-hidden="true" className="tape left-[38%] top-[2%] rotate-[-8deg]" />
               <div className="anim-fade-up absolute inset-0 flex items-center justify-center [--d:0.1s]">

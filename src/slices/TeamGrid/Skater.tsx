@@ -13,7 +13,10 @@ type Props = {
 
 const SCRIBBLES = ["text-brand-lime", "text-brand-hot", "text-brand-orange", "text-brand-blue"];
 
-/** A taped Polaroid of a team rider; hover draws a scribble behind them. */
+/**
+ * A taped Polaroid of a team rider; hover draws a scribble behind them. The
+ * whole card is the link (a stretched hit area), so phones get a big target.
+ */
 export function Skater({ skater, index }: Props) {
   const link = skater.data.customizer_link;
   // Most skaters have no customizer link in Prismic yet; send those to the builder.
@@ -52,9 +55,10 @@ export function Skater({ skater, index }: Props) {
       </div>
       <Link
         href={href}
-        className="group/l mt-4 flex min-h-11 items-center gap-2 font-mono text-[0.75rem] font-medium uppercase tracking-widest"
+        className="group/l mt-4 flex min-h-11 items-center gap-2 font-mono text-[0.75rem] font-medium uppercase tracking-widest after:absolute after:inset-0 after:z-[3] after:content-[''] focus-visible:shadow-none focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-[3px] focus-visible:after:outline-offset-4 focus-visible:after:outline-brand-lime"
       >
         <span className="link-hl [--hl:#ff4fa3]">Build their board</span>
+        <span className="sr-only">: {`${skater.data.first_name ?? ""} ${skater.data.last_name ?? ""}`.trim()}</span>
         <FaArrowRight aria-hidden="true" className="size-3 transition-transform duration-300 ease-slap group-hover/l:translate-x-1" />
       </Link>
     </div>

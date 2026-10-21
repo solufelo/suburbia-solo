@@ -1,6 +1,6 @@
 """
 Builds the web-sized textures the customiser uses from the full-size PNGs in
-public/Images. Re-run after adding a new deck or wheel PNG there:
+assets/images. Re-run after adding a new deck or wheel PNG there:
 
     python scripts/build-textures.py
 
@@ -21,7 +21,7 @@ from PIL import Image, ImageDraw, ImageFilter
 warnings.filterwarnings("ignore")
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "public" / "Images"
+SRC = ROOT / "assets" / "images"  # full-size sources, not deployed
 OUT_DECKS = ROOT / "public" / "textures" / "decks"
 OUT_WHEELS = ROOT / "public" / "textures" / "wheels"
 

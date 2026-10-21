@@ -26,7 +26,6 @@ const Hero: FC<HeroProps> = ({ slice, context }) => {
   const { customization } = useSkateboard();
   const heading = asText(slice.primary.heading) || "Escape the cul-de-sac";
   const { lead, last } = splitLastWord(heading);
-  const body = asText(slice.primary.body).trim();
   const price = priceLine((context?.products ?? []).map((p) => p.price), CUSTOM_BOARD_PRICE_CENTS, formatPrice);
 
   return (
@@ -70,6 +69,15 @@ const Hero: FC<HeroProps> = ({ slice, context }) => {
 
           {/* Notes pinned around the board. */}
           <div className="relative grow" aria-hidden="true">
+            {/* Phones: same hint, tucked under the headline and pointing down at the dots. */}
+            <div className="absolute left-0 top-[5%] flex items-start gap-1 md:hidden">
+              <MarkerNote className="anim-fade-up rotate-[-4deg] text-[1.2rem] leading-tight text-ink [--d:1.4s]">
+                tap the dots.
+                <br />
+                it does tricks.
+              </MarkerNote>
+              <ScribbleArrow className="mt-6 h-10 w-14 rotate-[25deg] text-brand-hot" />
+            </div>
             {/* Low on the right, clear of the board's wavy trail, pointing back up at it. */}
             <div className="absolute bottom-[6%] right-[3%] flex flex-col items-end gap-1 max-md:hidden">
               <ScribbleArrow className="mr-24 h-14 w-24 rotate-[-150deg] text-brand-hot" />
@@ -85,7 +93,7 @@ const Hero: FC<HeroProps> = ({ slice, context }) => {
             <div className="anim-fade-up md:col-span-5 [--d:0.8s]">
               {/* A paper scrap, so the board's wavy trail never runs through the text. */}
               <p className="lede inline-block max-w-[34ch] -rotate-1 bg-paper px-4 py-3 font-medium shadow-[4px_5px_0_#151314]">
-                {/[.!?]$/.test(body) ? body : `${body}.`}
+                Ready-to-ride completes, or build your own and watch it spin in 3D before it hits the cart.
               </p>
             </div>
             <div className="anim-fade-up pointer-events-auto flex flex-wrap items-center gap-x-6 gap-y-4 md:col-span-7 md:justify-end [--d:0.95s]">
@@ -121,10 +129,10 @@ const Hero: FC<HeroProps> = ({ slice, context }) => {
           rotate={-6}
           animate
           delay={1.25}
-          className="pointer-events-none absolute bottom-[28%] left-[5%] z-20 text-[1.25rem] max-md:hidden"
+          className="pointer-events-none absolute bottom-[calc(18rem+env(safe-area-inset-bottom))] right-3 z-20 text-[1rem] md:bottom-[28%] md:left-[5%] md:right-auto md:text-[1.25rem]"
         >
-          <span className="font-mono text-[0.65rem] font-medium tracking-widest">{price.label}</span>
-          <span className="text-[2rem]">{price.amount}</span>
+          <span className="font-mono text-[0.55rem] font-medium tracking-widest md:text-[0.65rem]">{price.label}</span>
+          <span className="text-[1.5rem] md:text-[2rem]">{price.amount}</span>
         </Sticker>
       </section>
 

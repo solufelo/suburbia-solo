@@ -27,7 +27,6 @@ const ProductGrid: FC<ProductGridProps> = ({ slice, context }) => {
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   const heading = asText(slice.primary.heading) || "Latest drop";
-  const body = asText(slice.primary.body);
 
   return (
     <section
@@ -49,7 +48,10 @@ const ProductGrid: FC<ProductGridProps> = ({ slice, context }) => {
           </div>
           <div className="md:col-span-4 md:pb-3">
             <Reveal delay={0.15}>
-              <p className="lede max-w-[32ch] text-ink/80">{body}</p>
+              <p className="lede max-w-[32ch] text-ink/80">
+                Fresh off the press: {picked.length} completes, built and ready to roll. Add one in a tap, or open
+                it in the builder and make it yours.
+              </p>
             </Reveal>
             <Reveal variant="slap" delay={0.35} rotate={-4} className="mt-4 inline-block">
               <MarkerNote className="text-2xl text-brand-hot">every one&rsquo;s a complete</MarkerNote>

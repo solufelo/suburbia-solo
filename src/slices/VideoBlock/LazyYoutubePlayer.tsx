@@ -1,20 +1,28 @@
 "use client";
 
 import { KeyTextField } from "@prismicio/client";
+import clsx from "clsx";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 type VideoProps = {
   youTubeID: KeyTextField;
 };
 
-/** Muted looping YouTube embed that only loads when it gets near the viewport. */
+/**
+ * Muted looping YouTube embed over a printed still. The embed (and YouTube's
+ * own requests) only start once the frame is actually on screen, and it fades
+ * in over the poster when it has loaded, so a slow or blocked YouTube leaves
+ * the still in place instead of a blank frame. Reduced motion keeps the still.
+ */
 export function LazyYouTubePlayer({ youTubeID }: VideoProps) {
   const [inView, setInView] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const current = containerRef.current;
-    if (!current) return;
+    if (!current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -22,27 +30,33 @@ export function LazyYouTubePlayer({ youTubeID }: VideoProps) {
           observer.disconnect();
         }
       },
-      { rootMargin: "600px" },
+      { threshold: 0.35 },
     );
     observer.observe(current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div ref={containerRef} className="relative h-full w-full bg-zinc-800">
+    <div ref={containerRef} className="relative h-full w-full bg-ink">
+      <Image
+        src="/reel-poster.webp"
+        alt="Two skaters sitting against a wall, one holding his board"
+        fill
+        sizes="(min-width: 1440px) 1280px, 100vw"
+        className="object-cover"
+      />
       {inView ? (
         <iframe
           title="Suburbia skate reel (muted, loops)"
-          src={`https://www.youtube-nocookie.com/embed/${youTubeID}?autoplay=1&mute=1&loop=1&controls=0&playsinline=1&playlist=${youTubeID}`}
+          src={`https://www.youtube-nocookie.com/embed/${youTubeID}?autoplay=1&mute=1&loop=1&controls=0&playsinline=1&rel=0&playlist=${youTubeID}`}
           allow="autoplay; encrypted-media; picture-in-picture"
-          loading="lazy"
-          className="pointer-events-none h-full w-full border-0"
+          onLoad={() => setLoaded(true)}
+          className={clsx(
+            "pointer-events-none absolute inset-0 h-full w-full border-0 transition-opacity duration-700",
+            loaded ? "opacity-100" : "opacity-0",
+          )}
         />
-      ) : (
-        <div className="grid h-full w-full place-items-center font-mono text-sm uppercase tracking-widest text-white/50">
-          Loading the reel…
-        </div>
-      )}
+      ) : null}
     </div>
   );
 }

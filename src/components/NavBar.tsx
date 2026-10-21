@@ -80,7 +80,7 @@ export function NavBar() {
                       aria-hidden="true"
                       className="absolute inset-x-1 inset-y-1.5 origin-left -rotate-1 scale-x-0 bg-brand-lime transition-transform duration-300 ease-snap group-hover:scale-x-100 group-aria-[current=page]:scale-x-100"
                     />
-                    <span aria-hidden="true" className="relative font-mono text-[0.65rem] text-ink/60">
+                    <span aria-hidden="true" className="relative font-mono text-[0.75rem] font-medium text-ink/80">
                       0{i + 1}
                     </span>
                     <span className="font-display relative text-[1.45rem] uppercase leading-none">{item.label}</span>

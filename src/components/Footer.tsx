@@ -26,7 +26,7 @@ export async function Footer() {
 
       <div className="relative h-[62vh] min-h-[26rem] overflow-hidden">
         <Image
-          src="/Images/pexels-artempodrez-4816744.jpg"
+          src="/Images/web/pexels-artempodrez-4816744.webp"
           alt=""
           fill
           sizes="100vw"
@@ -36,7 +36,8 @@ export async function Footer() {
         <FooterPhysics boardTextureURLs={boardTextureURLs} className="absolute inset-0 z-10 overflow-hidden" />
         <div className="wrap pointer-events-none relative z-20 flex h-full flex-col justify-between py-8">
           <Logo className="h-16 w-auto self-start text-paper mix-blend-difference md:h-24" />
-          <MarkerNote className="max-w-[14ch] -rotate-6 self-end text-2xl text-brand-lime md:text-3xl">
+          {/* Ink scrap behind the note: boards pile up under it, never through it. */}
+          <MarkerNote className="max-w-[14ch] -rotate-6 self-end bg-ink px-3 py-1.5 text-2xl text-brand-lime shadow-[4px_4px_0_#ff4fa3] md:text-3xl">
             Grab a board. Throw it.
           </MarkerNote>
         </div>
