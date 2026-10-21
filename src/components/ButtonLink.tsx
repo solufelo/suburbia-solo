@@ -9,6 +9,51 @@ export type ButtonProps = ComponentProps<typeof PrismicNextLink> & {
   icon?: "cart" | "skateboard" | "plus";
 };
 
+export function buttonClasses({
+  color = "orange",
+  size = "md",
+  className,
+}: Pick<ButtonProps, "color" | "size" | "className">) {
+  return clsx(
+    "button-cutout group mx-4 inline-flex items-center whitespace-nowrap bg-gradient-to-b from-25% to-75% bg-[length:100%_400%] font-bold transition-[filter,background-position] duration-300 hover:bg-bottom no-underline",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black disabled:pointer-events-none disabled:opacity-60",
+    size === "sm" && "gap-2.5 py-2 text-base",
+    size === "md" && "gap-3 px-1 text-lg ~py-2.5/3",
+    size === "lg" && "~text-lg/2xl ~gap-3/4 ~px-1/2 ~py-3/4",
+    color === "orange" && "from-brand-orange to-brand-lime text-black hover:text-black",
+    color === "purple" && "from-brand-purple to-brand-lime text-white hover:text-black",
+    color === "lime" && "from-brand-lime to-brand-orange text-black",
+    className,
+  );
+}
+
+export function ButtonIcon({
+  icon,
+  size = "md",
+}: {
+  icon: NonNullable<ButtonProps["icon"]>;
+  size?: ButtonProps["size"];
+}) {
+  return (
+    <>
+      <div
+        aria-hidden="true"
+        className={clsx(
+          "flex size-6 items-center justify-center transition-transform group-hover:-rotate-[25deg] [&>svg]:h-full [&>svg]:w-full",
+          size === "sm" && "size-5",
+          size === "md" && "size-6",
+          size === "lg" && "~size-6/8",
+        )}
+      >
+        {icon === "cart" && <FaShoppingCart />}
+        {icon === "skateboard" && <SkateboardIcon />}
+        {icon === "plus" && <FaPlus />}
+      </div>
+      <div className="w-px self-stretch bg-black/25" />
+    </>
+  );
+}
+
 export function ButtonLink({
   color = "orange",
   size = "md",
@@ -18,40 +63,28 @@ export function ButtonLink({
   ...props
 }: ButtonProps) {
   return (
-    <PrismicNextLink
-      className={clsx(
-        "button-cutout group mx-4 inline-flex items-center bg-gradient-to-b from-25% to-75% bg-[length:100%_400%] font-bold transition-[filter,background-position] duration-300 hover:bg-bottom no-underline",
-        size === "sm" && "gap-2.5 py-2 text-base",
-        size === "md" && "gap-3 px-1 text-lg ~py-2.5/3",
-        size === "lg" && "~text-lg/2xl ~gap-3/4 ~px-1/2 ~py-3/4",
-        color === "orange" &&
-          "from-brand-orange to-brand-lime text-black hover:text-black",
-        color === "purple" &&
-          "from-brand-purple to-brand-lime text-white hover:text-black",
-        color === "lime" && "from-brand-lime to-brand-orange text-black",
-        className,
-      )}
-      {...props}
-    >
-      {icon ? (
-        <>
-          <div
-            className={clsx(
-              "flex size-6 items-center justify-center transition-transform group-hover:-rotate-[25deg] [&>svg]:h-full [&>svg]:w-full",
-              size === "sm" && "size-5",
-              size === "md" && "size-6",
-              size === "lg" && "~size-6/8",
-            )}
-          >
-            {icon === "cart" && <FaShoppingCart />}
-            {icon === "skateboard" && <SkateboardIcon />}
-            {icon === "plus" && <FaPlus />}
-          </div>
-          <div className="w-px self-stretch bg-black/25" />
-        </>
-      ) : null}
+    <PrismicNextLink className={buttonClasses({ color, size, className })} {...props}>
+      {icon ? <ButtonIcon icon={icon} size={size} /> : null}
       {children}
     </PrismicNextLink>
+  );
+}
+
+/** Same look as ButtonLink, for actions (add to cart, submit) rather than links. */
+export function Button({
+  color = "orange",
+  size = "md",
+  icon,
+  children,
+  className,
+  type = "button",
+  ...props
+}: Omit<ComponentProps<"button">, "color"> & Pick<ButtonProps, "color" | "size" | "icon">) {
+  return (
+    <button type={type} className={buttonClasses({ color, size, className })} {...props}>
+      {icon ? <ButtonIcon icon={icon} size={size} /> : null}
+      {children}
+    </button>
   );
 }
 

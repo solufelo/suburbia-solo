@@ -1,5 +1,5 @@
 import { ButtonLink } from "@/components/ButtonLink";
-import { Content } from "@prismicio/client";
+import { Content, isFilled } from "@prismicio/client";
 import { PrismicNextImage } from "@prismicio/next";
 import clsx from "clsx";
 import { SkaterScribble } from "./SkaterScribble";
@@ -42,9 +42,17 @@ export function Skater({ skater, index }: Props) {
           <span className="block">{skater.data.last_name}</span>
         </h3>
       </div>
-      <ButtonLink field={skater.data.customizer_link} size="sm">
-        Build their board
-      </ButtonLink>
+      {/* Most skaters have no customizer link in Prismic yet; send those to the builder. */}
+      {isFilled.link(skater.data.customizer_link) &&
+      !("url" in skater.data.customizer_link && skater.data.customizer_link.url === "/") ? (
+        <ButtonLink field={skater.data.customizer_link} size="sm">
+          Build their board
+        </ButtonLink>
+      ) : (
+        <ButtonLink href="/build" size="sm">
+          Build their board
+        </ButtonLink>
+      )}
     </div>
   );
 }

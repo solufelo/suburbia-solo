@@ -1,63 +1,33 @@
-"use client";
-
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { Content } from "@prismicio/client";
 import { SliceComponentProps, PrismicText } from "@prismicio/react";
+
 import { Bounded } from "@/components/Bounded";
 import { Heading } from "@/components/Heading";
-import { createClient } from "@/lib/prismicio";
-import { Skater } from "./Skater";
 import { SlideIn } from "@/components/SlideIn";
+import type { SliceContext } from "@/slices/context";
+import { Skater } from "./Skater";
 
 /**
  * Props for `TeamGrid`.
  */
-export type TeamGridProps = SliceComponentProps<Content.TeamGridSlice>;
+export type TeamGridProps = SliceComponentProps<Content.TeamGridSlice, SliceContext>;
+
+const fullName = (s: Content.SkaterDocument) =>
+  `${s.data.first_name ?? ""} ${s.data.last_name ?? ""}`.trim().toLowerCase();
 
 /**
  * Component for "TeamGrid" Slices.
+ * Skaters come from the server through the slice context (no client fetch,
+ * no loading flash). Sophia/Sophie Castillo leads the grid, as before.
  */
-const TeamGrid: FC<TeamGridProps> = ({ slice }) => {
-  const [skaters, setSkaters] = useState<unknown[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchSkaters() {
-      const client = createClient();
-      const data = await client.getAllByType("skater");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const sorted = [...data].sort((a: any, b: any) => {
-        const nameA = `${a?.data?.first_name ?? ""} ${a?.data?.last_name ?? ""}`.trim().toLowerCase();
-        const nameB = `${b?.data?.first_name ?? ""} ${b?.data?.last_name ?? ""}`.trim().toLowerCase();
-        const aIsSophia = nameA === "sophia castillo";
-        const bIsSophia = nameB === "sophia castillo";
-        if (aIsSophia && !bIsSophia) return -1;
-        if (!aIsSophia && bIsSophia) return 1;
-        return 0;
-      });
-      setSkaters(sorted);
-      setLoading(false);
-    }
-    fetchSkaters();
-  }, []);
-  // Prevent hydration mismatch by not rendering until data is loaded
-  if (loading) {
-    return (
-      <Bounded
-        data-slice-type={slice.slice_type}
-        data-slice-variation={slice.variation}
-        className="bg-texture bg-brand-navy"
-      >
-        <SlideIn>
-
-        <Heading as="h2" size="lg" className="text-white mb-8 text-center">
-          <PrismicText field={slice.primary.heading} />
-        </Heading>
-        </SlideIn>
-        <div className="text-white text-center">Loading skaters...</div>
-      </Bounded>
-    );
-  }
+const TeamGrid: FC<TeamGridProps> = ({ slice, context }) => {
+  const skaters = [...(context?.skaters ?? [])]
+    .filter((s) => s.data.first_name)
+    .sort((a, b) => {
+      const lead = (s: Content.SkaterDocument) => /^soph(ia|ie) castillo$/.test(fullName(s));
+      return Number(lead(b)) - Number(lead(a));
+    });
 
   return (
     <Bounded
@@ -66,18 +36,15 @@ const TeamGrid: FC<TeamGridProps> = ({ slice }) => {
       className="bg-texture bg-brand-navy"
     >
       <SlideIn>
-      <Heading as="h2" size="lg" className="text-white mb-8 text-center">
-        <PrismicText field={slice.primary.heading} />
-      </Heading>
+        <Heading as="h2" size="lg" className="mb-8 text-center text-white">
+          <PrismicText field={slice.primary.heading} />
+        </Heading>
       </SlideIn>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-4">
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        {skaters.map((skater: any, index: number) => (
-          skater?.data?.first_name ? (
-            <SlideIn key={skater.id ?? index} delay={index * 0.1}>
-              <Skater index={index} skater={skater} />
-            </SlideIn>
-          ) : null
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {skaters.map((skater, index) => (
+          <SlideIn key={skater.id} delay={index * 0.1}>
+            <Skater index={index} skater={skater} />
+          </SlideIn>
         ))}
       </div>
     </Bounded>

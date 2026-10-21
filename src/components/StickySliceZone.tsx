@@ -4,6 +4,7 @@ import { SliceZone } from "@prismicio/react";
 // import { SliceBundle, CascadeContainer } from "@/components";
 import type { SliceLike } from "@prismicio/react";
 import dynamic from "next/dynamic";
+import type { SliceContext } from "@/slices/context";
 
 // Import components directly to avoid serialization issues
 const Hero = dynamic(() => import("@/slices/Hero"));
@@ -22,13 +23,16 @@ const components = {
 
 interface StickySliceZoneProps {
   slices: SliceLike[];
+  /** Server-fetched data the slices need (products, skaters). */
+  context?: SliceContext;
   className?: string;
   cascadeSpeed?: number;
   preserveIntegrity?: boolean;
 }
 
-export function StickySliceZone({ 
-  slices, 
+export function StickySliceZone({
+  slices,
+  context,
   className,
   cascadeSpeed = 0.05,
   preserveIntegrity = true
@@ -38,14 +42,15 @@ export function StickySliceZone({
 
   return (
     <div className={className}>
-      <SliceZone 
-        slices={bundledSlices} 
+      <SliceZone
+        slices={bundledSlices}
+        context={context}
         components={{
           ...components,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           text_and_image_bundle: ({ slice }: { slice: any }) => (
             <div>
-              <SliceZone slices={slice.slices} components={components} />
+              <SliceZone slices={slice.slices} components={components} context={context} />
             </div>
           ),
         }}

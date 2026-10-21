@@ -4,16 +4,11 @@
 @tailwind utilities;
 
 /* ===== CSS VARIABLES ===== */
+/* The brand look is light-only, so there is no dark palette. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #fffdf9;
+  --foreground: #27272a;
+  color-scheme: light;
 }
 
 /* ===== GLOBAL STYLES ===== */
