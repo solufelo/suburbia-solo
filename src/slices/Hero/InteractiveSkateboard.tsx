@@ -8,6 +8,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Hotspot } from "./Hotspot";
 import { WavyPaths } from "./WavyPaths";
+import { CanvasBoundary } from "@/components/CanvasBoundary";
 
 const INITIAL_CAMERA_POSITION = [1.5, 1, 1.4] as const;
 
@@ -26,19 +27,22 @@ export function InteractiveSkateboard({
 }: Props) {
   return (
     <div className="absolute inset-0 z-10 flex items-center justify-center">
-      <Canvas
-        className="min-h-[60rem] w-full"
-        camera={{ position: INITIAL_CAMERA_POSITION, fov: 55 }}
-      >
-        <Suspense>
-          <Scene
-            deckTextureURL={deckTextureURL}
-            wheelTextureURL={wheelTextureURL}
-            truckColor={truckColor}
-            boltColor={boltColor}
-          />
-        </Suspense>
-      </Canvas>
+      {/* No WebGL? The hero copy and button still work; the board just isn't drawn. */}
+      <CanvasBoundary fallback={null}>
+        <Canvas
+          className="min-h-[60rem] w-full"
+          camera={{ position: INITIAL_CAMERA_POSITION, fov: 55 }}
+        >
+          <Suspense>
+            <Scene
+              deckTextureURL={deckTextureURL}
+              wheelTextureURL={wheelTextureURL}
+              truckColor={truckColor}
+              boltColor={boltColor}
+            />
+          </Suspense>
+        </Canvas>
+      </CanvasBoundary>
     </div>
   );
 }

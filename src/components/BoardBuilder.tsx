@@ -1,101 +1,142 @@
 "use client";
 
-import React from 'react';
-import { useSkateboard } from '@/contexts/SkateboardContext';
+/* eslint-disable @next/next/no-img-element */
+import React from "react";
+import clsx from "clsx";
 
-// Available texture options from your Prismic gallery
-const DECK_TEXTURES = [
-  {
-    id: 'thank-you',
-    name: 'Thank You Deck',
-    url: 'https://images.prismic.io/suburbia-solo/aLfc4mGNHVfTOjM6_thank-you-deck.png'
-  },
-  {
-    id: 'yellow-black',
-    name: 'Yellow & Black',
-    url: 'https://images.prismic.io/suburbia-solo/aLfc6mGNHVfTOjNC_yellow-and-black.png'
-  },
-  // Add more textures here as you get them from Prismic
-];
+import { useSkateboard } from "@/contexts/SkateboardContext";
+import { DECKS, METALS, WHEELS, type BoardDesign } from "@/lib/customizer-options";
 
-const TRUCK_COLORS = [
-  { name: 'Silver', value: '#6F6E6A' },
-  { name: 'Black', value: '#000000' },
-  { name: 'Gold', value: '#FFD700' },
-  { name: 'Red', value: '#FF0000' },
-];
-
+/**
+ * Option pickers for the board builder. Each group is a native radio group, so
+ * arrow keys, Tab and screen readers behave as expected; the styling sits on
+ * the label.
+ */
 export function BoardBuilder() {
-  const { customization, updateCustomization } = useSkateboard();
+  const { design, updateDesign } = useSkateboard();
+  const set = (key: keyof BoardDesign) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    updateDesign({ [key]: e.target.value });
 
   return (
-    <div className="space-y-6">
-      {/* Deck Texture Selection */}
-      <div>
-        <h3 className="text-lg font-semibold mb-3 text-white">Deck Design</h3>
-        <div className="grid grid-cols-2 gap-3">
-          {DECK_TEXTURES.map((texture) => (
-            <button
-              key={texture.id}
-              onClick={() => updateCustomization({ deckTextureURL: texture.url })}
-              className={`p-3 border-2 rounded-lg transition-colors ${
-                customization.deckTextureURL === texture.url
-                  ? 'border-lime-500 bg-lime-500/20'
-                  : 'border-zinc-600 hover:border-zinc-500 bg-zinc-800/50'
-              }`}
-            >
-              <div className="w-full h-16 bg-zinc-700 rounded mb-2 flex items-center justify-center text-xs text-zinc-300">
-                {texture.name}
-              </div>
-              <span className="text-xs text-zinc-300">{texture.name}</span>
-            </button>
+    <div className="space-y-8">
+      <OptionGroup legend="Deck" current={DECKS.find((d) => d.id === design.deck)?.name}>
+        <div className="grid grid-cols-11 gap-1.5 sm:gap-2">
+          {DECKS.map((deck) => (
+            <label key={deck.id} className="group relative cursor-pointer" title={deck.name}>
+              <input
+                type="radio"
+                name="deck"
+                value={deck.id}
+                checked={design.deck === deck.id}
+                onChange={set("deck")}
+                className="peer sr-only"
+              />
+              <span className="sr-only">{deck.name}</span>
+              <img
+                src={deck.thumb}
+                alt=""
+                width={160}
+                height={632}
+                loading="lazy"
+                className="mx-auto h-auto w-full max-w-12 transition duration-300 group-hover:-translate-y-1 group-hover:-rotate-3 peer-checked:-translate-y-2 peer-checked:drop-shadow-[0_8px_0_#d9f154]"
+              />
+              <span className="pointer-events-none absolute inset-x-1 -bottom-3 h-1 rounded-full bg-transparent transition peer-checked:bg-brand-lime" />
+              <span className="pointer-events-none absolute -inset-1 rounded-md ring-2 ring-transparent transition peer-focus-visible:ring-white" />
+            </label>
           ))}
         </div>
-      </div>
+      </OptionGroup>
 
-      {/* Truck Color Selection */}
-      <div>
-        <h3 className="text-lg font-semibold mb-3 text-white">Truck Color</h3>
-        <div className="flex gap-3">
-          {TRUCK_COLORS.map((color) => (
-            <button
-              key={color.value}
-              onClick={() => updateCustomization({ truckColor: color.value })}
-              className={`w-10 h-10 rounded-full border-2 transition-colors ${
-                customization.truckColor === color.value
-                  ? 'border-lime-500'
-                  : 'border-zinc-600 hover:border-zinc-500'
-              }`}
-              style={{ backgroundColor: color.value }}
-              title={color.name}
-            />
+      <OptionGroup legend="Wheels" current={WHEELS.find((w) => w.id === design.wheel)?.name}>
+        <div className="grid grid-cols-9 gap-2 sm:flex sm:flex-wrap sm:gap-3 lg:gap-2">
+          {WHEELS.map((wheel) => (
+            <label key={wheel.id} className="group relative cursor-pointer" title={wheel.name}>
+              <input
+                type="radio"
+                name="wheel"
+                value={wheel.id}
+                checked={design.wheel === wheel.id}
+                onChange={set("wheel")}
+                className="peer sr-only"
+              />
+              <span className="sr-only">{wheel.name}</span>
+              <img
+                src={wheel.texture}
+                alt=""
+                width={40}
+                height={40}
+                loading="lazy"
+                className="aspect-square w-full max-w-10 rounded-full object-cover transition duration-300 group-hover:rotate-45 sm:size-10"
+              />
+              <span className="pointer-events-none absolute -inset-1 rounded-full ring-2 ring-zinc-700 transition peer-checked:ring-brand-lime peer-focus-visible:ring-white" />
+            </label>
           ))}
         </div>
-      </div>
+      </OptionGroup>
 
-      {/* Bolt Color Selection */}
-      <div>
-        <h3 className="text-lg font-semibold mb-3 text-white">Bolt Color</h3>
-        <div className="flex gap-3">
-          {TRUCK_COLORS.map((color) => (
-            <button
-              key={color.value}
-              onClick={() => updateCustomization({ boltColor: color.value })}
-              className={`w-10 h-10 rounded-full border-2 transition-colors ${
-                customization.boltColor === color.value
-                  ? 'border-lime-500'
-                  : 'border-zinc-600 hover:border-zinc-500'
-              }`}
-              style={{ backgroundColor: color.value }}
-              title={color.name}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className="text-sm text-zinc-400">
-        <p>Changes will appear on the skateboard in real-time!</p>
-      </div>
+      <SwatchGroup legend="Trucks" name="truck" value={design.truck} onChange={set("truck")} />
+      <SwatchGroup legend="Bolts" name="bolt" value={design.bolt} onChange={set("bolt")} />
     </div>
+  );
+}
+
+function OptionGroup({
+  legend,
+  current,
+  children,
+}: {
+  legend: string;
+  current?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <fieldset>
+      <legend className="mb-3 flex w-full items-baseline justify-between gap-4">
+        <span className="font-bowlby text-lg uppercase tracking-wide text-white">{legend}</span>
+        <span className="text-sm text-brand-lime" aria-hidden="true">
+          {current}
+        </span>
+      </legend>
+      {children}
+    </fieldset>
+  );
+}
+
+function SwatchGroup({
+  legend,
+  name,
+  value,
+  onChange,
+}: {
+  legend: string;
+  name: "truck" | "bolt";
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <OptionGroup legend={legend} current={METALS.find((m) => m.id === value)?.name}>
+      <div className="flex flex-wrap gap-3">
+        {METALS.map((metal) => (
+          <label key={metal.id} className="relative cursor-pointer" title={metal.name}>
+            <input
+              type="radio"
+              name={name}
+              value={metal.id}
+              checked={value === metal.id}
+              onChange={onChange}
+              className="peer sr-only"
+            />
+            <span className="sr-only">{metal.name}</span>
+            <span
+              className={clsx(
+                "block size-10 rounded-full shadow-[inset_0_-6px_10px_rgba(0,0,0,0.35),inset_0_4px_6px_rgba(255,255,255,0.35)] transition hover:scale-110",
+              )}
+              style={{ backgroundColor: metal.color }}
+            />
+            <span className="pointer-events-none absolute -inset-1 rounded-full ring-2 ring-zinc-700 transition peer-checked:ring-brand-lime peer-focus-visible:ring-white" />
+          </label>
+        ))}
+      </div>
+    </OptionGroup>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useCallback, useEffect, useRef } from "react";
 import * as THREE from "three";
 import {
   CameraControls,
@@ -12,76 +12,52 @@ import { Canvas } from "@react-three/fiber";
 
 import { useSkateboard } from "@/contexts/SkateboardContext";
 import { Skateboard } from "@/components/Skateboard";
+import { DECKS, WHEELS } from "@/lib/customizer-options";
 
-const DEFAULT_WHEEL_TEXTURE = "/skateboard/SkateWheel1.png";
-const DEFAULT_DECK_TEXTURE = "/skateboard/Deck.webp";
-const DEFAULT_TRUCK_COLOR = "#6F6E6A";
-const DEFAULT_BOLT_COLOR = "#6F6E6A";
 const ENVIRONMENT_COLOR = "#3B3A3A";
+// Where the camera looks and rests. In the "side" pose the board stands on its
+// edge, offset from the origin, so the focus is moved onto the board's visual
+// centre (measured from screenshots) to frame it in the middle of the preview.
+const FOCUS = new THREE.Vector3(-0.35, 0.25, 0.2);
+const REST_OFFSET = new THREE.Vector3(2.2, 1.0, 1.85);
+
+/** Resting camera position: further back on narrow (square) previews. */
+function restPosition() {
+  const narrow = typeof window !== "undefined" && window.innerWidth < 1024;
+  return REST_OFFSET.clone().multiplyScalar(narrow ? 1.3 : 1).add(FOCUS);
+}
+
+// Every option's texture is loaded up front (WebP, ~3 MB in total) so switching
+// decks or wheels is instant instead of blanking the scene while it loads.
+const DECK_TEXTURES = DECKS.map((d) => d.texture);
+const WHEEL_TEXTURES = WHEELS.map((w) => w.texture);
 
 export default function Preview() {
-  const cameraControls = useRef<CameraControls>(null);
+  const cameraControls = useRef<CameraControls | null>(null);
   const floorRef = useRef<THREE.Mesh>(null);
 
   const { customization } = useSkateboard();
 
-  const wheelTextureURL = customization.wheelTextureURL || DEFAULT_WHEEL_TEXTURE;
-  const deckTextureURL = customization.deckTextureURL || DEFAULT_DECK_TEXTURE;
-  const truckColor = customization.truckColor || DEFAULT_TRUCK_COLOR;
-  const boltColor = customization.boltColor || DEFAULT_BOLT_COLOR;
+  const { wheelTextureURL, deckTextureURL, truckColor, boltColor } = customization;
 
-  // Cinematic zoom-in animation on mount
-  useEffect(() => {
-    if (!cameraControls.current) return;
-
-    // Start from a wide angle
-    const startTarget = new THREE.Vector3(0, 0, 0);
-    const startPosition = new THREE.Vector3(3, 1.5, 2);
-    
-    // End at the perfect board view - properly centered
-    const endTarget = new THREE.Vector3(0, 0, 0);
-    const endPosition = new THREE.Vector3(1.2, 0.6, 1.0);
-
-    // Set initial position
-    cameraControls.current.setTarget(startTarget.x, startTarget.y, startTarget.z, false);
-    cameraControls.current.setPosition(startPosition.x, startPosition.y, startPosition.z, false);
-
-    // Animate to final position with smooth easing
-    setTimeout(() => {
-      if (!cameraControls.current) return;
-      
-      cameraControls.current.setTarget(endTarget.x, endTarget.y, endTarget.z, true);
-      cameraControls.current.setPosition(endPosition.x, endPosition.y, endPosition.z, true);
+  // Cinematic zoom-in once the controls exist. They mount inside the Canvas
+  // after this component's effects run, so this hangs off the ref callback.
+  const introPlayed = useRef(false);
+  const attachControls = useCallback((controls: CameraControls | null) => {
+    cameraControls.current = controls;
+    if (!controls || introPlayed.current) return;
+    introPlayed.current = true;
+    controls.setLookAt(3, 1.5, 2, FOCUS.x, FOCUS.y, FOCUS.z, false);
+    window.setTimeout(() => {
+      const rest = restPosition();
+      controls.setLookAt(rest.x, rest.y, rest.z, FOCUS.x, FOCUS.y, FOCUS.z, true);
     }, 100);
   }, []);
 
+  // Swing back to the hero angle whenever a part changes, so the change is seen.
   useEffect(() => {
-    setCameraControls(
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(1.2, 0.6, 1.0)
-    );
-  }, [customization.deckTextureURL]);
-
-  useEffect(() => {
-    setCameraControls(
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(1.2, 0.6, 1.0)
-    );
-  }, [customization.truckColor]);
-
-  useEffect(() => {
-    setCameraControls(
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(1.2, 0.6, 1.0)
-    );
-  }, [customization.wheelTextureURL]);
-
-  useEffect(() => {
-    setCameraControls(
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(1.2, 0.6, 1.0)
-    );
-  }, [customization.boltColor]);
+    setCameraControls(FOCUS, restPosition());
+  }, [deckTextureURL, wheelTextureURL, truckColor, boltColor]);
 
   function setCameraControls(target: THREE.Vector3, pos: THREE.Vector3) {
     if (!cameraControls.current) return;
@@ -124,9 +100,9 @@ export default function Preview() {
         </mesh>
 
         <Skateboard
-          wheelTextureURLs={[wheelTextureURL]}
+          wheelTextureURLs={WHEEL_TEXTURES}
           wheelTextureURL={wheelTextureURL}
-          deckTextureURLs={[deckTextureURL]}
+          deckTextureURLs={DECK_TEXTURES}
           deckTextureURL={deckTextureURL}
           truckColor={truckColor}
           boltColor={boltColor}
@@ -134,12 +110,11 @@ export default function Preview() {
           constantWheelSpin={false}
         />
         <CameraControls
-          ref={cameraControls}
+          ref={attachControls}
           minDistance={0.2}
           maxDistance={4}
           onStart={onCameraControlStart}
           smoothTime={0.8}
-          dampingFactor={0.05}
         />
       </Suspense>
       <Preload all />
