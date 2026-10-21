@@ -51,7 +51,7 @@ export function Skateboard({
   const wheelRefs = useRef<THREE.Object3D[]>([]);
 
 
-  const { nodes } = useGLTF('/skateboard.gltf') as unknown as GLTFResult;
+  const { nodes } = useGLTF('/skateboard.glb') as unknown as GLTFResult;
 
   // Load all textures
   const gripTapeDiffuse = useTexture('/skateboard/griptape-diffuse.webp')
@@ -312,4 +312,4 @@ export function Skateboard({
   )
 }
 
-useGLTF.preload('/skateboard.gltf');
+useGLTF.preload('/skateboard.glb');

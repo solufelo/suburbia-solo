@@ -35,10 +35,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="shortcut icon" href="/icon.svg" type="image/svg+xml" />
-      </head>
       <body
         className={`${bowlby.variable} ${DMMono.variable} antialiased font-medium text-zinc-800
         `}
