@@ -73,13 +73,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Scroll reveals only hide content once we know JS is running. */}
+      <body className={`${archivo.variable} ${dmMono.variable} ${marker.variable} grain antialiased`}>
+        {/* Scroll reveals only hide content once we know JS is running. In <body>, not a hand-written
+            <head>: Netlify injects a comment into <head>, which breaks hydration of its children. */}
         <script
           dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
         />
-      </head>
-      <body className={`${archivo.variable} ${dmMono.variable} ${marker.variable} grain antialiased`}>
         <a href="#main" className="skip-link">
           Skip to content
         </a>
