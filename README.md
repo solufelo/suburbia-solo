@@ -5,7 +5,7 @@ A skate shop built with **Next.js 15 (App Router)**, **Prismic** as the headless
 design a custom complete in 3D, keep it all in a cart that survives reloads, and check out
 through **Stripe in test mode** or a clearly labelled **mock checkout**.
 
-Live demo (pre-revamp build, until the `revamp` branch is deployed): https://suburbia-solo.netlify.app/
+Live demo: https://suburbia-solo.netlify.app/ (Netlify builds `main`).
 
 ![Homepage hero](revamp-shots/01-home.png)
 
