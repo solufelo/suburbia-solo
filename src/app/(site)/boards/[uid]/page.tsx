@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { CSSProperties } from "react";
 import { PrismicNextImage } from "@prismicio/next";
 import type { ImageField } from "@prismicio/client";
 
-import { Bounded } from "@/components/Bounded";
-import { Heading } from "@/components/Heading";
-import { HorizontalLine } from "@/components/Line";
+import { Heading, Kicker } from "@/components/Heading";
 import { JsonLd } from "@/components/JsonLd";
+import { Reveal } from "@/components/Reveal";
+import { Sticker } from "@/components/zine";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { PurchasePanel } from "@/components/shop/PurchasePanel";
 import { getProduct, getProducts } from "@/lib/catalog";
+import { findDeck } from "@/lib/customizer-options";
 import { formatPrice } from "@/lib/money";
 import { productJsonLd, productMetadata } from "@/lib/seo";
 
@@ -27,110 +29,160 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return productMetadata(product);
 }
 
+// Fictional but realistic spec sheet shared by every complete.
+const SPECS = (name: string) => [
+  ["Deck", `${name} graphic, 7-ply maple, 8.0″ × 31.75″`],
+  ["Grip", "Black, already applied"],
+  ["Trucks", "139 mm, baseplates and bolts"],
+  ["Wheels", "53 mm, 99A, bearings fitted"],
+];
+
 export default async function ProductPage({ params }: Params) {
   const { uid } = await params;
   const product = await getProduct(uid);
   if (!product) notFound();
 
-  const others = (await getProducts()).filter((p) => p.uid !== uid).slice(0, 4);
+  const all = await getProducts();
+  const others = all.filter((p) => p.uid !== uid).slice(0, 4);
+  const index = Math.max(0, all.findIndex((p) => p.uid === uid));
+  const deck = product.deck ? findDeck(product.deck) : undefined;
 
   return (
     <>
       <JsonLd data={productJsonLd(product)} />
 
-      <section className="bg-texture relative overflow-hidden bg-brand-gray px-6 pb-16 ~pt-44/48 md:~pt-36/40">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
-          <nav aria-label="Breadcrumb" className="text-sm lg:col-span-2">
-            <ol className="flex flex-wrap items-center gap-2 text-zinc-500">
+      <section className="bg-texture page-top relative overflow-hidden bg-paper pb-[clamp(3rem,7vw,6rem)]">
+        <div className="wrap">
+          <nav aria-label="Breadcrumb" className="anim-fade-up font-mono text-xs uppercase tracking-widest">
+            <ol className="flex flex-wrap items-center gap-2 text-ink/55">
               <li>
-                <Link href="/" className="hover:text-zinc-900 hover:underline">
+                <Link href="/" className="link-hl">
                   Home
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
               <li>
-                <Link href="/boards" className="hover:text-zinc-900 hover:underline">
+                <Link href="/boards" className="link-hl">
                   Boards
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
-              <li aria-current="page" className="text-zinc-900">
+              <li aria-current="page" className="text-ink">
                 {product.name}
               </li>
             </ol>
           </nav>
 
-          <figure className="group relative mx-auto flex aspect-[4/5] w-full max-w-md items-center justify-center lg:max-w-none">
-            {/* Brush-stroke backdrop in the board's accent colour. */}
-            <div
-              aria-hidden="true"
-              className="absolute inset-[4%] rotate-[4deg] opacity-90 [mask-image:url(/Images/paint-background.png)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]"
-              style={{ backgroundColor: product.accent }}
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-[10%] -rotate-[8deg] bg-zinc-900 opacity-[0.07] [mask-image:url(/Images/paint-background.png)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]"
-            />
-            <PrismicNextImage
-              // Prismic has no alt text on these images, so describe the board here.
-              field={{ ...product.image, alt: product.image.alt || `${product.name} complete skateboard` } as ImageField}
-              priority
-              sizes="(min-width: 1024px) 220px, 40vw"
-              className="relative h-[88%] w-auto -rotate-[10deg] drop-shadow-[18px_24px_0_rgba(0,0,0,0.18)] transition-transform duration-700 ease-out group-hover:-translate-y-2 group-hover:rotate-[-4deg]"
-            />
-            <span className="absolute right-[6%] top-[8%] grid size-24 rotate-12 place-items-center rounded-full bg-brand-lime text-center font-bowlby text-sm uppercase leading-tight ring-4 ring-black sm:size-28">
-              Ready
-              <br />
-              to ride
-            </span>
-          </figure>
+          <div className="mt-6 grid items-start gap-x-12 gap-y-10 lg:mt-10 lg:grid-cols-12">
+            <figure
+              className="group relative mx-auto aspect-[5/6] w-full max-w-lg lg:sticky lg:top-24 lg:col-span-6 lg:max-w-none"
+              style={{ "--accent": product.accent } as CSSProperties}
+            >
+              <div
+                aria-hidden="true"
+                className="absolute inset-[3%_2%] rotate-[3deg] bg-[var(--accent)] [mask-image:url(/Images/paint-background.png)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:100%_100%]"
+              />
+              <div
+                aria-hidden="true"
+                className="halftone absolute inset-[10%_8%] -rotate-[6deg] text-ink/20 [mask-image:url(/Images/paint-background.png)] [mask-size:100%_100%]"
+              />
+              <span aria-hidden="true" className="tape left-[38%] top-[2%] rotate-[-8deg]" />
+              <div className="anim-fade-up absolute inset-0 flex items-center justify-center [--d:0.1s]">
+                <PrismicNextImage
+                  // Prismic has no alt text on these images, so describe the board here.
+                  field={{ ...product.image, alt: product.image.alt || `${product.name} complete skateboard` } as ImageField}
+                  priority
+                  sizes="(min-width: 1024px) 300px, 50vw"
+                  className="relative h-[90%] w-auto -rotate-[9deg] drop-shadow-[18px_24px_0_rgba(21,19,20,0.22)] transition-transform duration-700 ease-snap group-hover:-translate-y-2 group-hover:rotate-[-3deg]"
+                />
+              </div>
+              {deck ? (
+                <div
+                  aria-hidden="true"
+                  className="anim-slap absolute bottom-[5%] left-[3%] w-[17%] min-w-20 bg-white p-1.5 pb-7 shadow-[5px_6px_0_rgba(21,19,20,0.6)] [--d:0.6s] [--r:-8deg]"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={deck.thumb} alt="" width={160} height={632} className="mx-auto h-auto w-[36%]" />
+                  <span className="absolute inset-x-0 bottom-1.5 text-center font-marker text-[0.8rem]">the graphic</span>
+                </div>
+              ) : null}
+              <Sticker
+                shape="star"
+                color="lime"
+                rotate={12}
+                animate
+                delay={0.45}
+                className="absolute right-[2%] top-[6%] size-28 text-[1.3rem] sm:size-32 sm:text-[1.5rem]"
+              >
+                Ready
+                <br />
+                to ride
+              </Sticker>
+            </figure>
 
-          <div>
-            <p className="text-sm uppercase tracking-[0.25em] text-brand-purple">Complete skateboard</p>
-            <Heading as="h1" size="lg" className="mt-3 leading-[0.9]">
-              {product.name}
-            </Heading>
-            <p className="mt-5 font-bowlby text-4xl tabular-nums" data-testid="pdp-price">
-              {formatPrice(product.price)}
-            </p>
+            <div className="lg:col-span-5 lg:col-start-8 lg:pt-6">
+              <Kicker index={`No.${String(index + 1).padStart(2, "0")}`} className="anim-fade-up">
+                Complete skateboard
+              </Kicker>
+              <h1 className="font-display t-xl mt-4 uppercase">
+                <span className="block overflow-hidden pb-[0.04em]">
+                  <span className="anim-rise block [--d:0.05s]">{product.name}</span>
+                </span>
+              </h1>
+              <div className="anim-fade-up mt-5 flex flex-wrap items-baseline gap-x-4 gap-y-1 [--d:0.2s]">
+                <p className="font-display text-[3rem] leading-none tabular-nums" data-testid="pdp-price">
+                  {formatPrice(product.price)}
+                </p>
+                <p className="font-mono text-xs uppercase tracking-widest text-ink/55">Assembled · ready to roll</p>
+              </div>
 
-            <HorizontalLine className="my-6 h-2 w-full stroke-2 text-zinc-300" />
+              <p className="anim-fade-up lede mt-6 max-w-[44ch] [--d:0.3s]">{product.description}</p>
 
-            <p className="max-w-prose text-lg leading-relaxed">{product.description}</p>
+              <div className="anim-fade-up [--d:0.4s]">
+                <PurchasePanel product={product} />
+              </div>
 
-            <PurchasePanel product={product} />
-
-            <HorizontalLine className="my-8 h-2 w-full stroke-2 text-zinc-300" />
-
-            <h2 className="font-bowlby text-lg uppercase">What you get</h2>
-            <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-              {[
-                `Deck with the ${product.name} graphic`,
-                "Griptape, already applied",
-                "Trucks, baseplates and bolts",
-                "Four wheels, ready to roll",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-2">
-                  <span aria-hidden="true" className="mt-1.5 size-2.5 shrink-0 rotate-45" style={{ backgroundColor: product.accent }} />
-                  {item}
-                </li>
-              ))}
-            </ul>
+              <div className="anim-fade-up mt-10 [--d:0.5s]">
+                <h2 className="kicker">In the box</h2>
+                <dl className="mt-3 border-t-2 border-ink font-mono text-sm">
+                  {SPECS(product.name).map(([k, v]) => (
+                    <div key={k} className="grid grid-cols-[6rem_1fr] gap-3 border-b border-dashed border-ink/30 py-3">
+                      <dt className="uppercase tracking-widest text-ink/55">{k}</dt>
+                      <dd>{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {others.length > 0 ? (
-        <Bounded className="bg-texture border-t-4 border-black bg-white">
-          <Heading as="h2" size="md" className="mb-10 text-center">
-            More boards
-          </Heading>
-          <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
-            {others.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
+        <section className="bg-texture border-t-2 border-ink bg-kraft py-[clamp(4rem,8vw,7rem)]">
+          <div className="wrap">
+            <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <Kicker index="+">Keep looking</Kicker>
+                <Heading as="h2" size="lg" className="mt-3">
+                  More boards
+                </Heading>
+              </div>
+              <Link href="/boards" className="font-display link-hl text-[1.5rem] uppercase">
+                See the rack
+              </Link>
+            </div>
+            <div
+              className={`grid grid-cols-2 gap-x-5 gap-y-12 md:gap-x-8 ${others.length === 3 ? "lg:grid-cols-3 lg:gap-x-16" : "lg:grid-cols-4"}`}
+            >
+              {others.map((p) => (
+                <Reveal key={p.id}>
+                  <ProductCard product={p} index={all.findIndex((x) => x.uid === p.uid)} />
+                </Reveal>
+              ))}
+            </div>
           </div>
-        </Bounded>
+        </section>
       ) : null}
     </>
   );

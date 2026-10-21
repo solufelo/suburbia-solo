@@ -8,3 +8,14 @@ export function siteUrl(): string {
 }
 
 export const SITE_NAME = "Suburbia Skateboards";
+
+/**
+ * Header and footer links. Owned by code rather than Prismic because the
+ * Prismic navigation pointed "Team" and "About" at "/" (nowhere).
+ */
+export const NAV = [
+  { href: "/boards", label: "Shop", note: "Completes" },
+  { href: "/build", label: "Build", note: "3D builder" },
+  { href: "/#team", label: "Team", note: "Who rides" },
+  { href: "/#story", label: "Story", note: "Why Suburbia" },
+] as const;

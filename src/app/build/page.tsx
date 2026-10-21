@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { designFromParams } from "@/lib/customizer-options";
+import { PageWipe } from "@/components/PageWipe";
 import { BuildClient } from "./BuildClient";
 
 export const metadata: Metadata = {
@@ -18,5 +19,10 @@ export default async function BuildPage({
   // ?deck=oni-mask&wheel=pink... opens the builder on a design (from a product
   // page or the cart's Edit link). Unknown ids are ignored.
   const preset = designFromParams(await searchParams);
-  return <BuildClient preset={preset} />;
+  return (
+    <>
+      <PageWipe />
+      <BuildClient preset={preset} />
+    </>
+  );
 }

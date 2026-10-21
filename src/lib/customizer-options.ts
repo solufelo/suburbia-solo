@@ -153,3 +153,22 @@ export function designFromParams(
   if (boltId && findMetal(boltId)) out.bolt = boltId;
   return out;
 }
+
+/**
+ * "Shuffle" in the builder: a random valid design that is never the one you
+ * already have. `rand` is injectable so tests can seed it.
+ */
+export function randomDesign(rand: () => number = Math.random, current?: BoardDesign): BoardDesign {
+  const pick = <T,>(list: readonly T[]) => list[Math.min(list.length - 1, Math.floor(rand() * list.length))];
+  const next: BoardDesign = {
+    deck: pick(DECKS).id,
+    wheel: pick(WHEELS).id,
+    truck: pick(METALS).id,
+    bolt: pick(METALS).id,
+  };
+  if (current && designKey(next) === designKey(current)) {
+    const i = DECKS.findIndex((d) => d.id === next.deck);
+    next.deck = DECKS[(i + 1) % DECKS.length].id;
+  }
+  return next;
+}

@@ -27,10 +27,22 @@ export function ParallaxImage({
   const hasPointerMoved = useRef(false);
 
   useEffect(() => {
+    // Still for reduced motion; otherwise only animate while on screen.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let rafId = 0;
+    let visible = false;
     const media = window.matchMedia("(min-width: 768px)");
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && !rafId) rafId = requestAnimationFrame(animationFrame);
+    });
+    if (containerRef.current) io.observe(containerRef.current);
 
     function animationFrame() {
+      if (!visible) {
+        rafId = 0;
+        return;
+      }
       let { x: targetX, y: targetY } = targetPosition.current;
       const { x: currentX, y: currentY } = currentPosition.current;
 
@@ -134,7 +146,6 @@ export function ParallaxImage({
       }
     }
 
-    rafId = requestAnimationFrame(animationFrame);
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
     const onChange = () => {
@@ -148,6 +159,7 @@ export function ParallaxImage({
       window.removeEventListener("touchmove", onTouchMove as EventListener);
       media.removeEventListener?.("change", onChange as EventListener);
       if (rafId) cancelAnimationFrame(rafId);
+      io.disconnect();
     };
   }, []);
 
@@ -163,7 +175,7 @@ export function ParallaxImage({
         ref={backgroundRef}
         className="col-start-1 row-start-1 will-change-transform flex items-center justify-center"
       >
-        <PrismicNextImage field={backgroundImage} alt="" className="w-11/12 md:w-11/12" />
+        <PrismicNextImage field={backgroundImage} alt="" imgixParams={{ width: 900 }} className="w-11/12" />
       </div>
 
       <div
@@ -174,7 +186,7 @@ export function ParallaxImage({
           field={foregroundImage}
           alt=""
           imgixParams={{ height: 800 }}
-          className="h-auto w-auto max-h-[600px] md:max-h-[700px] max-w-[100%] md:max-w-none"
+          className="h-auto max-h-[460px] w-auto max-w-full md:max-h-[640px] md:max-w-none"
         />
       </div>
     </div>

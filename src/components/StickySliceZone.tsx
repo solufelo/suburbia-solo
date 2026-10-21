@@ -49,7 +49,7 @@ export function StickySliceZone({
           ...components,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           text_and_image_bundle: ({ slice }: { slice: any }) => (
-            <div>
+            <div id="story" className="scroll-mt-16">
               <SliceZone slices={slice.slices} components={components} context={context} />
             </div>
           ),

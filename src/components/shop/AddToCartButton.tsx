@@ -11,10 +11,13 @@ type Props = {
   product: Pick<Product, "uid" | "name" | "price" | "image">;
   qty?: number;
   size?: "sm" | "md" | "lg";
+  /** Short "Add" label for tight tiles; the accessible name stays full. */
+  compact?: boolean;
   className?: string;
+  testId?: string;
 };
 
-export function AddToCartButton({ product, qty = 1, size = "md", className }: Props) {
+export function AddToCartButton({ product, qty = 1, size = "md", compact = false, className, testId }: Props) {
   const { add } = useCart();
   const [added, setAdded] = useState(false);
 
@@ -22,9 +25,10 @@ export function AddToCartButton({ product, qty = 1, size = "md", className }: Pr
     <Button
       icon="cart"
       size={size}
-      color="orange"
+      color={added ? "lime" : "orange"}
       className={className}
-      data-testid={`add-${product.uid}`}
+      data-testid={testId ?? `add-${product.uid}`}
+      aria-label={compact ? `Add ${product.name} to cart` : undefined}
       onClick={() => {
         add(
           {
@@ -40,7 +44,7 @@ export function AddToCartButton({ product, qty = 1, size = "md", className }: Pr
         window.setTimeout(() => setAdded(false), 1600);
       }}
     >
-      <span aria-live="polite">{added ? "Added!" : "Add to cart"}</span>
+      <span aria-live="polite">{added ? "Added!" : compact ? "Add" : "Add to cart"}</span>
     </Button>
   );
 }

@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { asImageSrc } from "@prismicio/client";
 
@@ -15,9 +17,20 @@ describe("Prismic fixtures", () => {
     expect(board.data.name).toBe("Oni Mask");
   });
 
-  it("points images at the local copies in public/Images", async () => {
+  it("points images at the web-sized local copies in public/Images/web", async () => {
     const board = await createClient().getByUID("skateboard", "pink-drop");
-    expect(asImageSrc(board.data.image)).toMatch(/^http:\/\/localhost:4311\/Images\/pink-drop-complete\.png/);
+    expect(asImageSrc(board.data.image)).toMatch(/^http:\/\/localhost:4311\/Images\/web\/pink-drop-complete\.webp/);
+  });
+
+  it("has a web copy on disk for every image the fixtures use", () => {
+    const json = readFileSync(resolve(__dirname, "../src/fixtures/prismic-documents.json"), "utf8");
+    const files = new Set(
+      [...json.matchAll(/images\.prismic\.io\/[\w-]+\/[\w-]+?_([^"?]+)\.(?:png|jpe?g|webp|avif|gif)/g)].map((m) => m[1]),
+    );
+    expect(files.size).toBeGreaterThan(10);
+    for (const name of files) {
+      expect(existsSync(resolve(__dirname, `../public/Images/web/${name}.webp`)), name).toBe(true);
+    }
   });
 });
 
@@ -46,7 +59,7 @@ describe("product SEO", () => {
     const meta = productMetadata(product);
     expect(meta.title).toBe("Oni Mask complete skateboard");
     expect(meta.alternates?.canonical).toBe("/boards/oni-mask");
-    expect(JSON.stringify(meta.openGraph)).toContain("onimask-complete.png");
+    expect(JSON.stringify(meta.openGraph)).toContain("onimask-complete.webp");
   });
 
   it("emits Product JSON-LD with a real offer and no invented ratings", async () => {

@@ -1,23 +1,20 @@
 import { FC } from "react";
 import Link from "next/link";
-import { Content, isFilled } from "@prismicio/client";
-import { SliceComponentProps, PrismicText, PrismicRichText } from "@prismicio/react";
+import { asText, Content, isFilled } from "@prismicio/client";
+import { SliceComponentProps } from "@prismicio/react";
+import { FaArrowRight } from "react-icons/fa";
 
-import { Bounded } from "@/components/Bounded";
-import { Heading } from "@/components/Heading";
-import { SlideIn } from "@/components/SlideIn";
+import { Heading, Kicker } from "@/components/Heading";
+import { Reveal } from "@/components/Reveal";
+import { MarkerNote } from "@/components/zine";
 import { ProductCard } from "@/components/shop/ProductCard";
 import type { SliceContext } from "@/slices/context";
 
-/**
- * Props for `ProductGrid`.
- */
 export type ProductGridProps = SliceComponentProps<Content.ProductGridSlice, SliceContext>;
 
 /**
- * Component for "ProductGrid" Slices.
- * Boards are fetched once on the server (see app/(site)/page.tsx) and passed
- * in through the slice context, so the grid renders with the page.
+ * Homepage board wall. Boards are fetched once on the server (see
+ * app/(site)/page.tsx) and passed in through the slice context.
  */
 const ProductGrid: FC<ProductGridProps> = ({ slice, context }) => {
   const products = context?.products ?? [];
@@ -29,36 +26,56 @@ const ProductGrid: FC<ProductGridProps> = ({ slice, context }) => {
     })
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
+  const heading = asText(slice.primary.heading) || "Latest drop";
+  const body = asText(slice.primary.body);
+
   return (
-    <Bounded
+    <section
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
-      className="bg-texture bg-brand-gray"
+      className="bg-texture relative overflow-hidden bg-paper py-[clamp(4rem,9vw,8rem)]"
     >
-      <SlideIn>
-        <Heading className="text-center ~mb-4/6" as="h2">
-          <PrismicText field={slice.primary.heading} />
-        </Heading>
-      </SlideIn>
-
-      <SlideIn>
-        <div className="text-center ~mb-6/10">
-          <PrismicRichText field={slice.primary.body} />
+      <div className="wrap">
+        <div className="grid items-end gap-6 md:grid-cols-12">
+          <div className="md:col-span-8">
+            <Reveal>
+              <Kicker index="01">The board wall</Kicker>
+            </Reveal>
+            <Reveal variant="mask" delay={0.05}>
+              <Heading as="h2" size="xl" className="mt-4">
+                {heading}
+              </Heading>
+            </Reveal>
+          </div>
+          <div className="md:col-span-4 md:pb-3">
+            <Reveal delay={0.15}>
+              <p className="lede max-w-[32ch] text-ink/80">{body}</p>
+            </Reveal>
+            <Reveal variant="slap" delay={0.35} rotate={-4} className="mt-4 inline-block">
+              <MarkerNote className="text-2xl text-brand-hot">every one&rsquo;s a complete</MarkerNote>
+            </Reveal>
+          </div>
         </div>
-      </SlideIn>
 
-      <div className="grid w-full grid-cols-1 gap-y-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
-        {picked.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        <div className="mt-[clamp(2.5rem,5vw,4.5rem)] grid grid-cols-2 gap-x-5 gap-y-12 md:gap-x-8 lg:grid-cols-4">
+          {picked.map((product, i) => (
+            <Reveal key={product.id} delay={i * 0.08}>
+              <ProductCard product={product} index={i} />
+            </Reveal>
+          ))}
+        </div>
+
+        <div className="mt-14 flex justify-center">
+          <Link
+            href="/boards"
+            className="group flex min-h-11 items-center gap-3 font-display text-[1.8rem] uppercase leading-none"
+          >
+            <span className="link-hl">Shop every board</span>
+            <FaArrowRight aria-hidden="true" className="size-5 transition-transform duration-300 ease-slap group-hover:translate-x-1.5" />
+          </Link>
+        </div>
       </div>
-
-      <p className="mt-12 text-center">
-        <Link href="/boards" className="underline decoration-brand-orange decoration-4 underline-offset-8 ~text-base/lg hover:text-brand-purple">
-          Shop every board
-        </Link>
-      </p>
-    </Bounded>
+    </section>
   );
 };
 

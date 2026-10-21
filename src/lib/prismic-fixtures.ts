@@ -7,8 +7,9 @@
  * the normal client API. Used when PRISMIC_FIXTURES=1 (tests, offline work,
  * no repository access) and as a fallback when the live API is unreachable.
  *
- * Images are rewritten from the Prismic CDN to the copies in public/Images so
- * fixture mode does not depend on Prismic at all.
+ * Images are rewritten from the Prismic CDN to web-sized copies in
+ * public/Images/web (scripts/build-web-images.py) so fixture mode does not
+ * depend on Prismic at all and does not ship the full-size source PNGs.
  */
 import snapshot from "@/fixtures/prismic-documents.json";
 
@@ -27,7 +28,8 @@ function loadDocuments(): Doc[] {
   const origin = siteOrigin();
   const json = JSON.stringify(snapshot.documents).replace(
     /https:\/\/images\.prismic\.io\/[\w-]+\/[\w-]+?_([^"?]+\.(?:png|jpe?g|webp|avif|gif|svg))(\?[^"]*)?/g,
-    (_match, file: string) => `${origin}/Images/${file}`,
+    // Web-sized WebP copies made by scripts/build-web-images.py.
+    (_match, file: string) => `${origin}/Images/web/${file.replace(/\.[a-z]+$/i, "")}.webp`,
   );
   documents = JSON.parse(json) as Doc[];
   return documents;

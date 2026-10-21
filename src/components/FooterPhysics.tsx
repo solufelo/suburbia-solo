@@ -103,64 +103,69 @@ export function FooterPhysics({
     let boundaries = createBoundaries(cw, ch);
     World.add(engine.current.world, boundaries);
 
-    // Add mouse interaction for dragging boards
-    const mouse = Mouse.create(render.canvas);
-    // @ts-expect-error - matter.js has incorrect types
-    mouse.element.removeEventListener("wheel", mouse.mousewheel);
+    // Dragging boards is a mouse toy. On touch screens matter.js would swallow
+    // the swipe and trap the page scroll, so phones just watch them fall.
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    let globalMouseUp = () => {};
+    if (!coarse) {
+      // Add mouse interaction for dragging boards
+      const mouse = Mouse.create(render.canvas);
+      // @ts-expect-error - matter.js has incorrect types
+      mouse.element.removeEventListener("wheel", mouse.mousewheel);
 
-    const mouseConstraint = MouseConstraint.create(engine.current, {
-      mouse,
-      constraint: {
-        stiffness: 0.8, // High but not maximum to prevent sticking
-        damping: 0.1, // Some damping to prevent oscillation
-        render: { visible: false },
-        length: 0, // Zero length for immediate attachment
-      },
-    });
+      const mouseConstraint = MouseConstraint.create(engine.current, {
+        mouse,
+        constraint: {
+          stiffness: 0.8, // High but not maximum to prevent sticking
+          damping: 0.1, // Some damping to prevent oscillation
+          render: { visible: false },
+          length: 0, // Zero length for immediate attachment
+        },
+      });
     
-    // Mouse constraint and canvas are ready
+      // Mouse constraint and canvas are ready
     
-    World.add(engine.current.world, mouseConstraint);
+      World.add(engine.current.world, mouseConstraint);
     
-    // Add event listeners to the mouse constraint for proper cleanup
-    mouseConstraint.mouse.element.addEventListener('mouseup', () => {
-      // Force release the constraint to prevent sticking
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const constraint = mouseConstraint.constraint as any;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mouseConstraintObj = mouseConstraint as any;
-      constraint.bodyB = null;
-      constraint.pointB = null;
-      mouseConstraintObj.body = null;
-    });
-    
-    // Ensure the canvas can receive mouse events and is properly positioned
-    render.canvas.style.cursor = 'grab';
-    render.canvas.style.touchAction = 'none';
-    render.canvas.style.position = 'absolute';
-    render.canvas.style.top = '0';
-    render.canvas.style.left = '0';
-    render.canvas.style.zIndex = '10';
-    render.canvas.style.pointerEvents = 'auto';
-    
-    // Canvas is ready for interaction
-    
-    // Canvas is properly configured
-
-    window.addEventListener("resize", onResize);
-    
-    // Add global mouse up listener to handle releases outside canvas
-    const globalMouseUp = () => {
-      if (mouseConstraint.constraint.bodyB) {
+      // Add event listeners to the mouse constraint for proper cleanup
+      mouseConstraint.mouse.element.addEventListener('mouseup', () => {
+        // Force release the constraint to prevent sticking
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const constraint = mouseConstraint.constraint as any;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const mouseConstraintObj = mouseConstraint as any;
         constraint.bodyB = null;
         constraint.pointB = null;
-        constraint.body = null;
-      }
-    };
+        mouseConstraintObj.body = null;
+      });
     
-    window.addEventListener('mouseup', globalMouseUp);
+      // Ensure the canvas can receive mouse events and is properly positioned
+      render.canvas.style.cursor = 'grab';
+      render.canvas.style.touchAction = 'none';
+      render.canvas.style.position = 'absolute';
+      render.canvas.style.top = '0';
+      render.canvas.style.left = '0';
+      render.canvas.style.zIndex = '10';
+      render.canvas.style.pointerEvents = 'auto';
+    
+      // Release a board dropped outside the canvas.
+      globalMouseUp = () => {
+        if (mouseConstraint.constraint.bodyB) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const constraint = mouseConstraint.constraint as any;
+          constraint.bodyB = null;
+          constraint.pointB = null;
+          constraint.body = null;
+        }
+      };
+      window.addEventListener("mouseup", globalMouseUp);
+    } else {
+      render.canvas.style.position = "absolute";
+      render.canvas.style.inset = "0";
+      render.canvas.style.pointerEvents = "none";
+    }
+
+    window.addEventListener("resize", onResize);
 
     function onResize() {
       if (!scene.current) return;

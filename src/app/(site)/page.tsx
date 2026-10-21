@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { asImageSrc, type Content } from "@prismicio/client";
+import { type Content } from "@prismicio/client";
 
 import { createClient } from "@/lib/prismicio";
 import { getProducts } from "@/lib/catalog";
@@ -27,12 +27,12 @@ export default async function Page() {
 export async function generateMetadata(): Promise<Metadata> {
   const client = createClient();
   const page = await client.getSingle("homepage").catch(() => notFound());
-  const image = asImageSrc(page.data.meta_image);
 
+  // Open Graph comes from the layout (/og.jpg, rendered from this hero): the
+  // Prismic meta image is the pre-revamp tutorial render and no longer matches.
   return {
     title: { absolute: page.data.meta_title || "Suburbia Skateboards" },
     description: page.data.meta_description ?? undefined,
     alternates: { canonical: "/" },
-    openGraph: image ? { images: [{ url: image }] } : undefined,
   };
 }

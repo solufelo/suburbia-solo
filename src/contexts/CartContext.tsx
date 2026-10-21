@@ -16,6 +16,7 @@ import {
   cartCount,
   cartReducer,
   cartSubtotal,
+  lineKey,
   parseStoredCart,
   type CartLine,
   type NewLine,
@@ -28,6 +29,8 @@ type CartContextValue = {
   /** False until the saved cart has been read from localStorage. */
   ready: boolean;
   isOpen: boolean;
+  /** The line most recently added and when, so the drawer can highlight it. */
+  lastAdded: { key: string; at: number } | null;
   add: (line: NewLine, qty?: number) => void;
   setQty: (key: string, qty: number) => void;
   remove: (key: string) => void;
@@ -50,6 +53,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, dispatch] = useReducer(cartReducer, []);
   const [ready, setReady] = useState(false);
   const [isOpen, setOpen] = useState(false);
+  const [lastAdded, setLastAdded] = useState<{ key: string; at: number } | null>(null);
 
   // Load after mount so server and first client render match.
   useEffect(() => {
@@ -78,6 +82,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const add = useCallback((line: NewLine, qty = 1) => {
     dispatch({ type: "add", line, qty });
+    setLastAdded({ key: lineKey(line), at: Date.now() });
     setOpen(true);
   }, []);
   const setQty = useCallback((key: string, qty: number) => dispatch({ type: "setQty", key, qty }), []);
@@ -93,6 +98,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal: cartSubtotal(lines),
       ready,
       isOpen,
+      lastAdded,
       add,
       setQty,
       remove,
@@ -100,7 +106,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       open,
       close,
     }),
-    [lines, ready, isOpen, add, setQty, remove, clear, open, close],
+    [lines, ready, isOpen, lastAdded, add, setQty, remove, clear, open, close],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

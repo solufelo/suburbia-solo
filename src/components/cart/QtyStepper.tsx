@@ -16,12 +16,12 @@ type Props = {
 
 export function QtyStepper({ value, onChange, label, min = 1, className }: Props) {
   const btn =
-    "grid size-9 place-items-center transition-colors hover:bg-brand-lime focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-black disabled:opacity-30 disabled:hover:bg-transparent";
+    "grid h-full min-h-10 w-10 place-items-center transition-colors duration-200 hover:bg-brand-lime active:bg-brand-orange disabled:opacity-25 disabled:hover:bg-transparent focus-visible:shadow-none focus-visible:-outline-offset-4";
   return (
     <div
       role="group"
       aria-label={label}
-      className={clsx("inline-flex items-center border-2 border-black bg-white", className)}
+      className={clsx("inline-flex h-11 items-stretch border-2 border-ink bg-white shadow-[3px_3px_0_#151314]", className)}
     >
       <button
         type="button"
@@ -32,7 +32,7 @@ export function QtyStepper({ value, onChange, label, min = 1, className }: Props
       >
         <FaMinus className="size-3" aria-hidden="true" />
       </button>
-      <output aria-live="polite" className="w-8 text-center tabular-nums">
+      <output aria-live="polite" className="grid w-9 place-items-center border-x-2 border-dashed border-ink/20 font-mono font-medium tabular-nums">
         {value}
       </output>
       <button

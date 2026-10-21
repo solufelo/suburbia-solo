@@ -1,157 +1,431 @@
-/* ===== TAILWIND BASE ===== */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ===== CSS VARIABLES ===== */
-/* The brand look is light-only, so there is no dark palette. */
+/* =====================================================================
+   Suburbia: "cul-de-sac xerox"
+   Paper ground, ink type, brand colours used as flat riso spot inks,
+   tape + stickers + marker notes on top. The brand look is light-only.
+   ===================================================================== */
 :root {
-  --background: #fffdf9;
-  --foreground: #27272a;
+  --paper: #f3eee4;
+  --ink: #151314;
+  --lime: #d9f154;
+  --pink: #f7d0e9;
+  --hot: #ff4fa3;
+  --orange: #ff7347;
+  --blue: #4876ff;
+  --ease-snap: cubic-bezier(0.2, 0.9, 0.25, 1);
+  --ease-slap: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --header-h: 4.5rem;
   color-scheme: light;
 }
 
-/* ===== GLOBAL STYLES ===== */
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-DM-mono), monospace;
-  overflow-x: hidden;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-paper font-sans text-ink;
+    font-weight: 450;
+    font-stretch: 92%;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--lime);
+    color: var(--ink);
+  }
+  /* One focus style everywhere: an ink ring with a lime halo. */
+  :focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 7px var(--lime);
+    border-radius: 2px;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--lime);
+    box-shadow: 0 0 0 7px var(--ink);
+  }
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline-offset: 0;
+  }
+  img {
+    -webkit-user-drag: none;
+  }
 }
 
-/* Force DM Mono font for all text content */
-* {
-  font-family: var(--font-DM-mono), monospace !important;
-  font-feature-settings: normal !important;
-  font-variant: normal !important;
-  font-style: normal !important;
-}
+@layer components {
+  /* ---------- Layout ---------- */
+  .wrap {
+    width: 100%;
+    max-width: 86rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 3rem);
+  }
+  .page-top {
+    padding-top: calc(var(--header-h) + env(safe-area-inset-top) + clamp(2rem, 5vw, 4.5rem));
+  }
 
-/* Override any font-family declarations - allows Bowlby font to work */
-.font-bowlby,
-.font-bowlby * {
-  font-family: var(--font-bowlby-sc), system-ui, sans-serif !important;
-}
+  /* ---------- Type ---------- */
+  /* Fluid display scale (condensed type can run big). Safelisted in
+     tailwind.config.js because Heading builds the class from a prop. */
+  .t-mega { font-size: clamp(4.25rem, 14.5vw, 15rem); line-height: 0.8; }
+  .t-xl { font-size: clamp(3.5rem, 9vw, 9.5rem); line-height: 0.82; }
+  .t-lg { font-size: clamp(3rem, 6.6vw, 6.75rem); line-height: 0.84; }
+  .t-md { font-size: clamp(2.25rem, 4.4vw, 4.25rem); line-height: 0.88; }
+  .t-sm { font-size: clamp(1.6rem, 2.6vw, 2.4rem); line-height: 0.92; }
+  .t-xs { font-size: clamp(1.25rem, 1.6vw, 1.5rem); line-height: 1; }
 
-/* Force normal characters for special Unicode */
-* {
-  unicode-bidi: normal !important;
-  direction: ltr !important;
-}
+  .font-display {
+    font-family: var(--font-archivo), "Arial Narrow", Impact, sans-serif;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-synthesis: none;
+    letter-spacing: -0.005em;
+    word-spacing: 0.1em;
+  }
+  .font-wide {
+    font-family: var(--font-archivo), sans-serif;
+    font-weight: 800;
+    font-stretch: 125%;
+  }
 
-/* ===== CUSTOM UTILITY CLASSES ===== */
+  .kicker {
+    @apply font-mono text-[0.72rem] font-medium uppercase tracking-[0.2em];
+  }
+  .lede {
+    font-size: clamp(1.05rem, 1.25vw, 1.25rem);
+    line-height: 1.5;
+    font-weight: 450;
+    text-wrap: pretty;
+  }
+  .balance { text-wrap: balance; }
 
-/* Background texture pattern used across slices */
-.bg-texture {
-  background-image: url("/bg-texture.webp");
-  background-size: 720px 460px;
-  background-position: center;
-  background-repeat: repeat;
-}
+  /* Riso misregistration on big headlines. */
+  .riso { text-shadow: 0.035em 0.035em 0 var(--riso, var(--hot)); }
 
-/* Button with cutout effect and hover animations */
-.button-cutout {
-  position: relative;
-  filter: drop-shadow(0 1px 0 #000) drop-shadow(-1px 0 0 #000)
-    drop-shadow(1px 0 0 #000) drop-shadow(0 -1px 0 #000)
-    drop-shadow(8px 8px 0 #000);
+  /* Outlined display words for backgrounds. */
+  .outline-type {
+    color: transparent;
+    -webkit-text-stroke: 2px currentColor;
+  }
 
-  &:hover {
+  /* Highlighter underline for inline links. */
+  .link-hl {
+    background-image: linear-gradient(var(--hl, var(--lime)), var(--hl, var(--lime)));
+    background-size: 100% 0.32em;
+    background-position: 0 88%;
+    background-repeat: no-repeat;
+    transition: background-size 0.35s var(--ease-snap);
+  }
+  @media (hover: hover) {
+    .link-hl:hover {
+      background-size: 100% 88%;
+    }
+  }
+
+  /* ---------- Surfaces ---------- */
+  .bg-texture {
+    background-image: url("/bg-texture.webp");
+    background-size: 720px 460px;
+    background-position: center;
+    background-repeat: repeat;
+  }
+  .halftone {
+    background-image: radial-gradient(currentColor 1.1px, transparent 1.3px);
+    background-size: 9px 9px;
+  }
+
+  /* Translucent masking tape. Position with utilities. */
+  .tape {
+    position: absolute;
+    width: 6.5rem;
+    height: 1.6rem;
+    background: rgb(240 232 205 / 0.78);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+    clip-path: polygon(3% 8%, 9% 0, 17% 9%, 26% 0, 37% 8%, 49% 0, 61% 7%, 73% 0, 84% 9%, 93% 0, 100% 10%, 98% 92%, 90% 100%, 80% 91%, 69% 100%, 57% 93%, 45% 100%, 33% 92%, 21% 100%, 10% 91%, 0 100%);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* Die-cut sticker: white border + hard shadow. */
+  .sticker {
+    @apply inline-grid place-items-center font-display uppercase leading-[0.85] text-ink;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px var(--ink), 5px 6px 0 rgb(0 0 0 / 0.85);
+  }
+
+  /* Torn paper edges (applied to a full-width block's top or bottom). */
+  .torn-bottom {
+    -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 14px) no-repeat,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14' preserveAspectRatio='none'%3E%3Cpath d='M0 0h120v6l-4 4-6-3-5 5-7-4-6 3-5-5-6 6-4-3-7 4-5-4-6 5-6-3-5 4-6-6-5 5-7-3-4 4-6-5-5 4-6-2-5 4-4-3L0 9z'/%3E%3C/svg%3E") bottom / 240px 14px repeat-x;
+    mask: linear-gradient(#000 0 0) top / 100% calc(100% - 14px) no-repeat,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14' preserveAspectRatio='none'%3E%3Cpath d='M0 0h120v6l-4 4-6-3-5 5-7-4-6 3-5-5-6 6-4-3-7 4-5-4-6 5-6-3-5 4-6-6-5 5-7-3-4 4-6-5-5 4-6-2-5 4-4-3L0 9z'/%3E%3C/svg%3E") bottom / 240px 14px repeat-x;
+  }
+  .zigzag-bottom {
+    -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 18px 100%;
+    mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 18px 100%;
+  }
+
+  /* ---------- Buttons ---------- */
+  /* Ticket-cut button with a hard shadow that collapses on hover and press. */
+  .button-cutout {
+    position: relative;
     filter: drop-shadow(0 1px 0 #000) drop-shadow(-1px 0 0 #000)
       drop-shadow(1px 0 0 #000) drop-shadow(0 -1px 0 #000)
-      drop-shadow(2px 2px 0 #000);
+      drop-shadow(6px 6px 0 #000);
+    transition: filter 0.25s var(--ease-snap), transform 0.25s var(--ease-snap),
+      background-position 0.35s var(--ease-snap);
   }
-
-  &::before {
+  @media (hover: hover) {
+    .button-cutout:hover {
+      filter: drop-shadow(0 1px 0 #000) drop-shadow(-1px 0 0 #000)
+        drop-shadow(1px 0 0 #000) drop-shadow(0 -1px 0 #000)
+        drop-shadow(3px 3px 0 #000);
+      transform: translate(1px, 1px) rotate(-0.6deg);
+    }
+  }
+  .button-cutout:active {
+    filter: drop-shadow(0 1px 0 #000) drop-shadow(-1px 0 0 #000)
+      drop-shadow(1px 0 0 #000) drop-shadow(0 -1px 0 #000)
+      drop-shadow(0 0 0 #000);
+    transform: translate(5px, 5px);
+    transition-duration: 0.06s;
+  }
+  .button-cutout::before,
+  .button-cutout::after {
     position: absolute;
     top: 0;
+    content: "";
+    background: inherit;
+    width: 0.9rem;
+    height: 100%;
+  }
+  .button-cutout::before {
     right: calc(100% - 1px);
-    content: "";
-    background: inherit;
-    width: 1rem;
-    height: 100%;
-    clip-path: polygon(
-      23% 19%,
-      0 0,
-      100% 0,
-      100% 100%,
-      0 100%,
-      29% 79%,
-      9% 80%,
-      0 33%
-    );
+    clip-path: polygon(23% 19%, 0 0, 100% 0, 100% 100%, 0 100%, 29% 79%, 9% 80%, 0 33%);
   }
-
-  &::after {
-    position: absolute;
-    top: 0;
+  .button-cutout::after {
     left: calc(100% - 1px);
-    content: "";
-    background: inherit;
-    width: 1rem;
-    height: 100%;
-    clip-path: polygon(
-      100% 0,
-      74% 28%,
-      100% 29%,
-      100% 70%,
-      84% 78%,
-      100% 100%,
-      0 100%,
-      0 0
-    );
-}
+    clip-path: polygon(100% 0, 74% 28%, 100% 29%, 100% 70%, 84% 78%, 100% 100%, 0 100%, 0 0);
+  }
+
+  /* Square ink icon button (close, remove, menu). */
+  .icon-btn {
+    @apply grid size-11 place-items-center border-2 border-ink bg-white text-ink;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: transform 0.2s var(--ease-snap), box-shadow 0.2s var(--ease-snap), background-color 0.2s;
+  }
+  @media (hover: hover) {
+    .icon-btn:hover {
+      @apply bg-brand-lime;
+      transform: translate(1px, 1px) rotate(-4deg);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+  }
+  .icon-btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--ink);
+  }
+
+  /* ---------- Forms ---------- */
+  .field-input {
+    @apply w-full border-2 border-ink bg-white px-3.5 text-base text-ink placeholder:text-zinc-400;
+    height: 3.25rem;
+    border-radius: 0;
+    transition: box-shadow 0.2s var(--ease-snap), transform 0.2s var(--ease-snap);
+  }
+  .field-input:focus {
+    outline: none;
+    box-shadow: 5px 5px 0 var(--lime), 5px 5px 0 2px var(--ink);
+    transform: translate(-2px, -2px);
+  }
+  .field-input[aria-invalid="true"] {
+    @apply border-brand-orange;
+    box-shadow: 4px 4px 0 var(--orange);
+  }
+
+  /* ---------- Misc ---------- */
+  .skip-link {
+    @apply fixed left-3 top-3 z-[200] -translate-y-24 bg-ink px-4 py-3 font-mono text-sm text-white transition-transform;
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+
+  .stack-layout {
+    display: grid;
+    grid-template-areas: "stack";
+    place-items: center;
+  }
+  .stack-layout > * {
+    grid-area: stack;
+  }
+
+  .skater-scribble-path {
+    opacity: 0.8;
+    stroke-dasharray: 2300;
+    stroke-dashoffset: -2300;
+    transition: stroke-dashoffset 1s ease-in-out 0.2s;
+    transform-origin: center center;
+  }
+  .skater:hover .skater-scribble-path,
+  .skater:focus-within .skater-scribble-path {
+    stroke-dashoffset: 0;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-.stack-layout {
-  display: grid;
-  grid-template-areas: "stack";
-  place-items: center;
+/* =====================================================================
+   Grain: one fixed photocopy-noise layer over everything.
+   ===================================================================== */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  pointer-events: none;
+  opacity: 0.11;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.stack-layout > * {
-  grid-area: stack;
-}
+/* =====================================================================
+   Motion
+   ===================================================================== */
 
-.skater-scribble-path {
-  opacity: 0.8;
-  stroke-dasharray: 2300;
-  stroke-dashoffset: -2300;
-  transition: stroke-dashoffset 1s ease-in-out 0.2s;
-  transform-origin: center center;
-}
-
-.skater:hover .skater-scribble-path {
-  stroke-dashoffset: 0;
-}
-
-.slide-in-hidden {
+/* Scroll reveal (see components/Reveal.tsx). Hidden only when JS runs. */
+.js [data-reveal] {
   opacity: 0;
-  transform: translateX(-100px);
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  transform: translate3d(0, 28px, 0);
+  transition: opacity 0.7s var(--ease-snap), transform 0.8s var(--ease-snap);
+  transition-delay: var(--reveal-delay, 0s);
 }
-
-.slide-in-visible {
+.js [data-reveal="slap"] {
+  transform: scale(1.3) rotate(-10deg);
+  transition: opacity 0.25s ease-out, transform 0.55s var(--ease-slap);
+  transition-delay: var(--reveal-delay, 0s);
+}
+/* Mask: the wrapper is observed, its child is wiped in (a fully clipped
+   element never reports as intersecting). */
+.js [data-reveal="mask"] {
   opacity: 1;
-  transform: translateX(0);
+  transform: none;
+}
+.js [data-reveal="mask"] > * {
+  clip-path: inset(0 0 100% 0);
+  transform: translate3d(0, 0.35em, 0);
+  transition: clip-path 0.9s var(--ease-snap), transform 0.9s var(--ease-snap);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.js [data-reveal][data-shown] {
+  opacity: 1;
+  transform: none;
+}
+.js [data-reveal="mask"][data-shown] > * {
+  clip-path: inset(-25% -5% -25% -5%);
+  transform: none;
 }
 
-/* Squiggle animation for WavyPaths */
-@keyframes squiggle {
-  0%, 100% {
-    transform: translateX(0) translateY(0);
-  }
-  25% {
-    transform: translateX(1px) translateY(-0.5px);
-  }
-  50% {
-    transform: translateX(-0.5px) translateY(0.5px);
-  }
-  75% {
-    transform: translateX(0.5px) translateY(-0.25px);
-  }
+/* Hero load-in: CSS only, so it plays from the first paint. */
+@keyframes rise {
+  from { transform: translate3d(0, 105%, 0); }
+  to { transform: none; }
+}
+@keyframes tile-drop {
+  0% { opacity: 0; transform: translate3d(0, -60%, 0) rotate(calc(var(--r, 0deg) - 25deg)) scale(1.4); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: rotate(var(--r, 0deg)); }
+}
+@keyframes slap {
+  0% { opacity: 0; transform: scale(1.6) rotate(calc(var(--r, 0deg) - 14deg)); }
+  55% { opacity: 1; }
+  100% { opacity: 1; transform: scale(1) rotate(var(--r, 0deg)); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes marquee {
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes pop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.45) rotate(-8deg); }
+  100% { transform: scale(1); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-9deg); }
+  75% { transform: rotate(7deg); }
+}
+@keyframes flash-lime {
+  0% { background-color: rgb(217 241 84 / 0.9); }
+  100% { background-color: rgb(217 241 84 / 0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes wipe-up {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -112%, 0); }
+}
+@keyframes stamp {
+  0% { opacity: 0; transform: scale(2.4) rotate(calc(var(--r, -8deg) + 10deg)); }
+  60% { opacity: 1; transform: scale(0.94) rotate(var(--r, -8deg)); }
+  100% { opacity: 1; transform: scale(1) rotate(var(--r, -8deg)); }
+}
+@keyframes print {
+  from { clip-path: inset(0 0 100% 0); transform: translate3d(0, -24px, 0); }
+  to { clip-path: inset(0 0 -20px 0); transform: none; }
+}
+@keyframes burst {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); }
+  20% { opacity: 1; }
+  100% { opacity: 1; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1) rotate(var(--r)); }
 }
 
-.animate-squiggle {
-  animation: squiggle 6s ease-in-out infinite;
+.anim-rise { animation: rise 0.9s var(--ease-snap) both; animation-delay: var(--d, 0s); }
+.anim-tile { animation: tile-drop 0.75s var(--ease-slap) both; animation-delay: var(--d, 0s); }
+.anim-slap { animation: slap 0.6s var(--ease-slap) both; animation-delay: var(--d, 0s); }
+.anim-fade-up { animation: fade-up 0.8s var(--ease-snap) both; animation-delay: var(--d, 0s); }
+.anim-stamp { animation: stamp 0.6s var(--ease-slap) both; animation-delay: var(--d, 0s); }
+.anim-print { animation: print 1.1s var(--ease-snap) both; animation-delay: var(--d, 0s); }
+.anim-pop { animation: pop 0.45s var(--ease-slap); }
+.anim-wiggle { animation: wiggle 0.5s ease-in-out; }
+.anim-flash { animation: flash-lime 1.6s ease-out; }
+.anim-spin { animation: spin 0.9s linear infinite; }
+.marquee-track { animation: marquee var(--marquee-speed, 38s) linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track { animation: none !important; }
+  .js [data-reveal],
+  .js [data-reveal="mask"] > * {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
 }

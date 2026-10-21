@@ -1,24 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 
 import { buttonClasses, ButtonIcon } from "@/components/ButtonLink";
-import { Heading } from "@/components/Heading";
-import { HorizontalLine } from "@/components/Line";
+import { Kicker } from "@/components/Heading";
+import { Receipt } from "@/components/checkout/Receipt";
+import { MarkerNote, RansomWord, StarGlyph } from "@/components/zine";
 import { useCart } from "@/contexts/CartContext";
 import type { StripeSessionSummary } from "@/lib/checkout";
 import { formatPrice } from "@/lib/money";
 import { loadReceipt, type MockReceipt } from "@/lib/receipt";
+import { burstStickers } from "@/lib/zine";
 
 type Props = { orderId: string | null; stripe: StripeSessionSummary | null };
+
+const BURST = burstStickers(12, 7);
 
 export function SuccessClient({ orderId, stripe }: Props) {
   const { clear, ready } = useCart();
   const [receipt, setReceipt] = useState<MockReceipt | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (orderId) setReceipt(loadReceipt(orderId));
+    setLoaded(true);
   }, [orderId]);
 
   // A paid Stripe session means the cart has been bought.
@@ -28,73 +34,128 @@ export function SuccessClient({ orderId, stripe }: Props) {
 
   const paid = stripe?.paymentStatus === "paid";
   const reference = receipt?.orderId ?? orderId ?? stripe?.id.slice(-10).toUpperCase() ?? null;
+  const pendingStripe = stripe && !paid;
 
   return (
-    <section className="bg-texture relative overflow-hidden bg-brand-pink px-6 pb-24 ~pt-44/48 md:~pt-36/40">
-      <div className="mx-auto w-full max-w-3xl">
-        <p className="text-sm uppercase tracking-[0.25em] text-brand-purple">
-          {stripe ? "Stripe test payment" : "Demo order"}
-        </p>
-        <Heading as="h1" size="lg" className="mt-2 leading-[0.85]">
-          {stripe && !paid ? "Almost there" : "You're rolling"}
-        </Heading>
-
-        <div className="mt-10 border-2 border-black bg-white p-6 shadow-[10px_10px_0_#000] sm:p-8">
-          {reference ? (
-            <p className="flex flex-wrap items-baseline justify-between gap-2">
-              <span className="text-xs uppercase tracking-widest text-zinc-500">Reference</span>
-              <span className="font-bowlby text-2xl" data-testid="order-id">
-                {reference}
+    <section className="bg-texture page-top relative overflow-hidden bg-brand-pink pb-[clamp(4rem,8vw,7rem)]">
+      <div
+        aria-hidden="true"
+        className="halftone absolute -left-[10%] top-[20%] h-[70%] w-[55%] text-brand-hot/40 [mask-image:radial-gradient(closest-side,#000_30%,transparent)]"
+      />
+      <div className="wrap relative grid items-start gap-x-14 gap-y-12 lg:grid-cols-12">
+        <div className="lg:col-span-6 lg:pt-6">
+          <Kicker index={stripe ? "$" : "✓"} className="anim-fade-up">
+            {stripe ? "Stripe test payment" : "Demo order placed"}
+          </Kicker>
+          <h1 className="font-display t-mega mt-5 uppercase leading-[0.8]">
+            {pendingStripe ? (
+              <span className="block overflow-hidden pb-[0.04em]">
+                <span className="anim-rise block">Almost there</span>
               </span>
-            </p>
-          ) : null}
+            ) : (
+              <>
+                <span className="block overflow-hidden pb-[0.04em]">
+                  <span className="anim-rise block">You&apos;re</span>
+                </span>{" "}
+                <RansomWord word="rolling" animate baseDelay={0.3} className="mt-[0.12em] text-[clamp(2.6rem,7.6vw,7.4rem)]" />
+              </>
+            )}
+          </h1>
 
-          {stripe ? (
-            <p className="mt-4">
-              {paid
-                ? `Stripe confirmed a test payment of ${formatPrice(stripe.amountTotal ?? 0)}${stripe.email ? ` from ${stripe.email}` : ""}. No real money moved.`
-                : `Stripe reports this payment as "${stripe.paymentStatus}". Nothing has been charged yet.`}
-            </p>
-          ) : (
-            <p className="mt-4" data-testid="demo-note">
-              This was a demo order: nothing was charged and nothing will ship. In a live shop, this is where the
-              confirmation email would be sent.
-            </p>
-          )}
+          <div className="anim-fade-up mt-8 max-w-[44ch] [--d:0.7s]">
+            {stripe ? (
+              <p className="lede">
+                {paid
+                  ? `Stripe confirmed a test payment of ${formatPrice(stripe.amountTotal ?? 0)}${stripe.email ? ` from ${stripe.email}` : ""}. No real money moved.`
+                  : `Stripe reports this payment as "${stripe.paymentStatus}". Nothing has been charged yet.`}
+              </p>
+            ) : (
+              <p className="lede" data-testid="demo-note">
+                This was a demo order: nothing was charged and nothing will ship. In a real shop, this is where your
+                confirmation email would land.
+              </p>
+            )}
+          </div>
 
-          {receipt ? (
-            <>
-              <HorizontalLine className="my-6 h-2 w-full stroke-2 text-zinc-300" />
-              <ul className="space-y-3">
-                {receipt.lines.map((l, i) => (
-                  <li key={i} className="flex justify-between gap-4">
-                    <span>
-                      <span className="font-bowlby">{l.qty} × {l.name}</span>
-                      <span className="block text-xs text-zinc-500">{l.description}</span>
-                    </span>
-                    <span className="tabular-nums">{formatPrice(l.unitAmount * l.qty)}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-6 flex items-baseline justify-between border-t-2 border-black pt-4">
-                <span className="font-bowlby uppercase">Total</span>
-                <span className="font-bowlby text-3xl tabular-nums">{formatPrice(receipt.subtotal)}</span>
-              </p>
-              <p className="mt-4 text-sm text-zinc-500">
-                For {receipt.name} ({receipt.email}).
-              </p>
-            </>
-          ) : null}
+          <div className="anim-fade-up mt-10 flex flex-wrap items-center gap-x-4 gap-y-6 [--d:0.85s]">
+            <Link href="/boards" className={buttonClasses({ color: "orange", size: "lg" })}>
+              <ButtonIcon icon="skateboard" size="lg" />
+              Keep shopping
+            </Link>
+            <Link href="/build" className={buttonClasses({ color: "purple", size: "lg" })}>
+              Build another
+            </Link>
+          </div>
+          <MarkerNote className="anim-fade-up mt-8 inline-block -rotate-2 text-2xl text-ink/70 [--d:1.1s]">
+            now go skate it. (in your head.)
+          </MarkerNote>
         </div>
 
-        <div className="mt-12 flex flex-wrap gap-6">
-          <Link href="/boards" className={buttonClasses({ color: "orange", size: "lg" })}>
-            <ButtonIcon icon="skateboard" size="lg" />
-            Keep shopping
-          </Link>
-          <Link href="/build" className={buttonClasses({ color: "purple", size: "lg" })}>
-            Build another
-          </Link>
+        <div className="relative lg:col-span-5 lg:col-start-8">
+          {/* Sticker burst from behind the receipt. */}
+          <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 z-0 max-lg:hidden">
+            {BURST.map((b, i) => (
+              <span
+                key={i}
+                className="absolute left-0 top-0 [animation:burst_0.9s_var(--ease-slap)_both]"
+                style={{ "--x": `${Math.round(b.x * 1.35)}px`, "--y": `${Math.round(b.y * 0.8)}px`, "--r": `${b.rotate}deg`, animationDelay: `${0.5 + b.delay}s` } as CSSProperties}
+              >
+                {b.kind === "star" ? (
+                  <StarGlyph className={`size-9 ${b.color}`} />
+                ) : (
+                  <span className={`block size-7 rounded-full border-[3px] border-white shadow-[2px_3px_0_#151314] ${b.bg}`} />
+                )}
+              </span>
+            ))}
+          </div>
+
+          <div className="anim-print relative z-10 [--d:0.35s]">
+            {receipt ? (
+              <Receipt
+                title="Order"
+                reference={
+                  <span className="font-display text-[1.6rem] normal-case leading-none tracking-normal" data-testid="order-id">
+                    {reference}
+                  </span>
+                }
+                total={receipt.subtotal}
+                footer={`For ${receipt.name} · ${receipt.email}`}
+                lines={receipt.lines.map((l, i) => ({
+                  key: String(i),
+                  qty: l.qty,
+                  name: l.name,
+                  description: l.description,
+                  amount: l.unitAmount * l.qty,
+                }))}
+              />
+            ) : (
+              <div className="zigzag-bottom bg-white px-8 pb-12 pt-8 font-mono text-sm [filter:drop-shadow(8px_10px_0_rgba(21,19,20,0.85))]">
+                {reference ? (
+                  <p className="flex flex-wrap items-baseline justify-between gap-2 uppercase tracking-widest">
+                    <span className="text-ink/55">Reference</span>
+                    <span className="font-display text-[1.8rem] normal-case tracking-normal" data-testid="order-id">
+                      {reference}
+                    </span>
+                  </p>
+                ) : null}
+                <p className="mt-4 text-ink/70">
+                  {loaded
+                    ? "The itemised receipt lives in the tab you checked out in. Your order reference is above."
+                    : "Printing your receipt…"}
+                </p>
+              </div>
+            )}
+          </div>
+            {!stripe ? (
+              <span
+                aria-hidden="true"
+                className="anim-stamp pointer-events-none absolute -bottom-6 -right-4 z-20 sm:-right-8 border-[5px] border-double border-brand-orange px-4 py-2 text-center font-display text-[1.7rem] uppercase leading-[0.9] text-brand-orange mix-blend-multiply [--d:1.3s] [--r:-12deg]"
+              >
+                Demo
+                <br />
+                <span className="text-[1rem]">Nothing charged</span>
+              </span>
+            ) : null}
         </div>
       </div>
     </section>

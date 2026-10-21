@@ -1,16 +1,13 @@
-import { Content } from "@prismicio/client";
-import {
-  PrismicRichText,
-  PrismicText,
-  SliceComponentProps,
-} from "@prismicio/react";
+import { asText, Content, isFilled } from "@prismicio/client";
+import { SliceComponentProps } from "@prismicio/react";
 import clsx from "clsx";
+import type { CSSProperties } from "react";
 
-import { Bounded } from "@/components/Bounded";
 import { ButtonLink } from "@/components/ButtonLink";
-import { Heading } from "@/components/Heading";
+import { Heading, Kicker } from "@/components/Heading";
+import { Reveal } from "@/components/Reveal";
+import { MarkerNote } from "@/components/zine";
 import { ParallaxImage } from "./ParallaxImage";
-import { SlideIn } from "@/components/SlideIn";
 
 declare module "react" {
   interface CSSProperties {
@@ -18,88 +15,94 @@ declare module "react" {
   }
 }
 
-/**
- * Props for `TextAndImage`.
- */
 export type TextAndImageProps = SliceComponentProps<Content.TextAndImageSlice>;
 
+// Each colour gets its own ink pairing so text always clears contrast.
+const THEMES = {
+  Blue: { section: "bg-brand-blue text-white on-dark", riso: "#151314", note: "text-brand-lime", button: "lime" },
+  Orange: { section: "bg-brand-orange text-ink", riso: "#f7d0e9", note: "text-white", button: "purple" },
+  Navy: { section: "bg-brand-navy text-white on-dark", riso: "#ff4fa3", note: "text-brand-lime", button: "lime" },
+  Lime: { section: "bg-brand-lime text-ink", riso: "#ff4fa3", note: "text-brand-navy", button: "orange" },
+} as const;
+
+// Margin scrawls, one per panel, in the order the panels appear.
+const NOTES = ["tested on real curbs", "draw on it. we did.", "scuffs = character", "local kids first"];
+
 /**
- * Component for "TextAndImage" Slices.
+ * Story panels: they stack as you scroll (sticky), each with a taped cut-out
+ * photo and one marker note in the margin.
  */
-const TextAndImage = ({ slice, index }: TextAndImageProps & { index?: number }) => {
-  const theme = slice.primary.theme;
+const TextAndImage = ({ slice, index = 0 }: TextAndImageProps & { index?: number }) => {
+  const theme = THEMES[(slice.primary.theme as keyof typeof THEMES) ?? "Blue"] ?? THEMES.Blue;
+  const imageLeft = slice.variation === "imgOnLeft";
+  const button = slice.primary.button;
+  // Prismic points most of these buttons at "/" or nowhere; send them to the shop.
+  const buttonGoesSomewhere =
+    isFilled.link(button) && !("url" in button && (button.url === "/" || !button.url));
+
   return (
-    <Bounded
+    <section
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
       className={clsx(
-        "sticky top-[calc(var(--index)*2rem)]",
-        theme === "Blue" && "bg-texture bg-brand-blue text-white",
-        theme === "Orange" && "bg-texture bg-brand-orange text-white",
-        theme === "Navy" && "bg-texture bg-brand-navy text-white",
-        theme === "Lime" && "bg-texture bg-brand-lime"
+        "bg-texture sticky top-[calc(var(--index)*1.5rem)] overflow-hidden py-[clamp(3.5rem,8vw,7rem)] shadow-[0_-2px_0_#151314]",
+        theme.section,
       )}
       style={{ "--index": index }}
     >
-      {/* Container div for the entire slice with parallax effect */}
-      <div className="relative w-full h-full">
-        <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2 md:gap-24 md:items-center">
-          {/* Text content - hidden on mobile, shown on desktop */}
-          <div
-            className={clsx(
-              "hidden md:flex flex-col items-center gap-8 text-center md:items-start md:text-left",
-              slice.variation === "imgOnLeft" && "md:order-2"
-            )}
+      <div className="wrap grid items-center gap-x-16 gap-y-8 md:grid-cols-12">
+        <div className={clsx("relative md:col-span-6", imageLeft ? "md:order-1" : "md:order-2")}>
+          <span aria-hidden="true" className="tape left-[12%] top-[6%] z-10 rotate-[-12deg] max-md:hidden" />
+          <span aria-hidden="true" className="tape bottom-[10%] right-[10%] z-10 rotate-[9deg] max-md:hidden" />
+          <ParallaxImage foregroundImage={slice.primary.foregroundimg} backgroundImage={slice.primary.bg_img} />
+          <Reveal
+            variant="slap"
+            delay={0.3}
+            rotate={imageLeft ? 6 : -6}
+            className={clsx("absolute bottom-[6%] z-10", imageLeft ? "right-0" : "left-0")}
           >
-            <SlideIn>
+            <MarkerNote className={clsx("text-[clamp(1.4rem,2.2vw,2rem)]", theme.note)}>
+              {NOTES[index % NOTES.length]}
+            </MarkerNote>
+          </Reveal>
+        </div>
 
-            <Heading size="lg" as="h2">
-              <PrismicText field={slice.primary.heading} />
+        <div
+          className={clsx(
+            "flex flex-col items-start gap-6 md:col-span-5",
+            imageLeft ? "md:order-2 md:col-start-8" : "md:order-1",
+          )}
+        >
+          <Reveal>
+            <Kicker index={String(index + 2).padStart(2, "0")}>
+              <span className="sr-only">Story, part {index + 1}: </span>
+              {["The deck", "The graphics", "The abuse", "The scene"][index % 4]}
+            </Kicker>
+          </Reveal>
+          <Reveal variant="mask" delay={0.05}>
+            <Heading as="h2" size="lg">
+              <span className="riso" style={{ "--riso": theme.riso } as CSSProperties}>
+                {asText(slice.primary.heading)}
+              </span>
             </Heading>
-            </SlideIn>
-            <SlideIn>
-              
-            <div className="max-w-md text-lg leading-relaxed">
-              <PrismicRichText field={slice.primary.body} />
-            </div>
-            </SlideIn>
-            <SlideIn>
-
-            <ButtonLink
-              field={slice.primary.button}
-              color={theme === "Lime" ? "orange" : "lime"}
-              >
-              {slice.primary.button.text}
-            </ButtonLink>
-              </SlideIn>
-          </div>
-
-          {/* Image container with parallax effect */}
-          <div className="w-full relative">
-            <ParallaxImage
-              foregroundImage={slice.primary.foregroundimg}
-              backgroundImage={slice.primary.bg_img}
-            />
-          </div>
-
-          {/* Mobile text and button - shown below image on mobile */}
-          <div className="md:hidden flex flex-col items-center gap-3 text-center px-4 pb-4">
-            <Heading size="lg" as="h2">
-              <PrismicText field={slice.primary.heading} />
-            </Heading>
-            <div className="max-w-md text-sm leading-relaxed">
-              <PrismicRichText field={slice.primary.body} />
-            </div>
-            <ButtonLink
-              field={slice.primary.button}
-              color={theme === "Lime" ? "orange" : "lime"}
-            >
-              {slice.primary.button.text}
-            </ButtonLink>
-          </div>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <p className="lede max-w-[38ch] font-medium">{asText(slice.primary.body)}</p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            {buttonGoesSomewhere ? (
+              <ButtonLink field={button} color={theme.button} icon="arrow" className="!ml-4">
+                {button.text || "Shop boards"}
+              </ButtonLink>
+            ) : (
+              <ButtonLink href="/boards" color={theme.button} icon="arrow" className="!ml-4">
+                {button.text || "Shop boards"}
+              </ButtonLink>
+            )}
+          </Reveal>
         </div>
       </div>
-    </Bounded>
+    </section>
   );
 };
 
