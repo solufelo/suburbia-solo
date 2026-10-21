@@ -44,6 +44,35 @@
           "allowText": true,
           "repeat": false
         }
+      },
+      "description": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Description",
+          "placeholder": "One or two sentences for the product page and search results",
+          "allowTargetBlank": true,
+          "multi": "paragraph,strong,em"
+        }
+      },
+      "deck_id": {
+        "type": "Select",
+        "config": {
+          "label": "Customizer deck",
+          "placeholder": "Deck graphic this board opens with in the builder",
+          "options": [
+            "thank-you",
+            "oni-mask",
+            "pink-swirl",
+            "red-black",
+            "green-navy",
+            "yellow-black",
+            "black-yellow",
+            "red-white",
+            "gray-black",
+            "grid-streaks",
+            "against-the-tide"
+          ]
+        }
       }
     }
   }

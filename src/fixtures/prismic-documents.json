@@ -1,0 +1,899 @@
+{
+  "repository": "suburbia-solo",
+  "documents": [
+    {
+      "id": "aLfSLxIAACIA5IHs",
+      "uid": null,
+      "url": null,
+      "type": "homepage",
+      "href": "https://suburbia-solo.cdn.prismic.io/api/v2/documents/search?ref=aLp94xEAACIAfTKo&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22aLfSLxIAACIA5IHs%22%29+%5D%5D",
+      "tags": [],
+      "first_publication_date": "2025-09-03T05:29:23+0000",
+      "last_publication_date": "2025-09-05T01:43:18+0000",
+      "slugs": [
+        "homepage"
+      ],
+      "linked_documents": [],
+      "lang": "en-us",
+      "alternate_languages": [],
+      "data": {
+        "slices": [
+          {
+            "variation": "default",
+            "version": "initial",
+            "items": [],
+            "primary": {
+              "heading": [
+                {
+                  "type": "paragraph",
+                  "text": "Escape the Cul-de-sac",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "body": [
+                {
+                  "type": "paragraph",
+                  "text": "Not just a board, your board. Design a board that's as real as the places you'll take it",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "button": {
+                "link_type": "Web",
+                "key": "43347f40-c392-4306-a9ca-d93f4fc316c1",
+                "url": "/build",
+                "text": "Build Your Board"
+              }
+            },
+            "id": "hero$f4ba2d73-3bac-49e6-bff4-38a095b25c89",
+            "slice_type": "hero",
+            "slice_label": null
+          },
+          {
+            "variation": "default",
+            "version": "initial",
+            "items": [],
+            "primary": {
+              "heading": [
+                {
+                  "type": "heading2",
+                  "text": "Latest Drop",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "body": [
+                {
+                  "type": "paragraph",
+                  "text": "Grab our freshest designs before they sell out!",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "product": [
+                {
+                  "skateboard": {
+                    "id": "aLjndhIAACEA5jtP",
+                    "type": "skateboard",
+                    "tags": [],
+                    "lang": "en-us",
+                    "slug": "oni-mask",
+                    "first_publication_date": "2025-09-04T01:12:38+0000",
+                    "last_publication_date": "2025-09-04T01:12:38+0000",
+                    "uid": "oni-mask",
+                    "data": {
+                      "name": "Oni Mask"
+                    },
+                    "link_type": "Document",
+                    "key": "001c88eb-c8b7-4fb9-936a-42b75baed89c",
+                    "isBroken": false
+                  }
+                },
+                {
+                  "skateboard": {
+                    "id": "aLkgXhIAACEA5o9A",
+                    "type": "skateboard",
+                    "tags": [],
+                    "lang": "en-us",
+                    "slug": "pink-drop",
+                    "first_publication_date": "2025-09-04T05:16:30+0000",
+                    "last_publication_date": "2025-09-04T05:20:36+0000",
+                    "uid": "pink-drop",
+                    "data": {
+                      "name": "Pink Drop"
+                    },
+                    "link_type": "Document",
+                    "key": "362fc1ce-ce2d-41c8-9b81-f00b5be61c04",
+                    "isBroken": false
+                  }
+                },
+                {
+                  "skateboard": {
+                    "id": "aLkggBIAAB8A5o9z",
+                    "type": "skateboard",
+                    "tags": [],
+                    "lang": "en-us",
+                    "slug": "red--black",
+                    "first_publication_date": "2025-09-04T05:16:26+0000",
+                    "last_publication_date": "2025-09-04T05:20:15+0000",
+                    "uid": "red--black",
+                    "data": {
+                      "name": "Red & Black"
+                    },
+                    "link_type": "Document",
+                    "key": "b880a73f-ecfd-4a2e-b477-1fc48b1b56ac",
+                    "isBroken": false
+                  }
+                },
+                {
+                  "skateboard": {
+                    "id": "aLkgoBIAACAA5o-l",
+                    "type": "skateboard",
+                    "tags": [],
+                    "lang": "en-us",
+                    "slug": "green-navy",
+                    "first_publication_date": "2025-09-04T05:16:19+0000",
+                    "last_publication_date": "2025-09-04T05:20:25+0000",
+                    "uid": "green-navy",
+                    "data": {
+                      "name": "Green Navy"
+                    },
+                    "link_type": "Document",
+                    "key": "a0e7e7fc-d349-496e-957f-4109a24feda0",
+                    "isBroken": false
+                  }
+                }
+              ]
+            },
+            "id": "product_grid$b9858dba-64ba-4bba-8d3f-7faf3444a61d",
+            "slice_type": "product_grid",
+            "slice_label": null
+          },
+          {
+            "variation": "default",
+            "version": "initial",
+            "items": [],
+            "primary": {
+              "theme": "Blue",
+              "heading": [
+                {
+                  "type": "heading2",
+                  "text": "Crafted for the Kickflip",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "body": [
+                {
+                  "type": "paragraph",
+                  "text": "Built for big tricks and hard landings, our boards are designed to handle every flip, grind, and bail. Perfect balance, every time.",
+                  "spans": [
+                    {
+                      "start": 0,
+                      "end": 131,
+                      "type": "strong"
+                    }
+                  ],
+                  "direction": "ltr"
+                }
+              ],
+              "button": {
+                "link_type": "Web",
+                "key": "7f63c289-b6ca-4d60-8741-7c5a0b4a8574",
+                "url": "/",
+                "text": "Shop Boards"
+              },
+              "bg_img": {
+                "dimensions": {
+                  "width": 880,
+                  "height": 1080
+                },
+                "alt": null,
+                "copyright": null,
+                "url": "https://images.prismic.io/suburbia-solo/aLfcvmGNHVfTOjMX_paint-background.png?auto=format,compress",
+                "id": "aLfcvmGNHVfTOjMX",
+                "edit": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 1,
+                  "background": "transparent"
+                }
+              },
+              "foregroundimg": {
+                "dimensions": {
+                  "width": 2663,
+                  "height": 4025
+                },
+                "alt": null,
+                "copyright": null,
+                "url": "https://images.prismic.io/suburbia-solo/aLfcu2GNHVfTOjMU_guy-1.png?auto=format,compress",
+                "id": "aLfcu2GNHVfTOjMU",
+                "edit": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 1,
+                  "background": "transparent"
+                }
+              }
+            },
+            "id": "text_and_image$3e9ced1e-d15a-42d3-b354-f10f279ae957",
+            "slice_type": "text_and_image",
+            "slice_label": null
+          },
+          {
+            "variation": "imgOnLeft",
+            "version": "initial",
+            "items": [],
+            "primary": {
+              "theme": "Orange",
+              "heading": [
+                {
+                  "type": "heading2",
+                  "text": "Not Just a Deck, It’s Your Canvas",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "body": [
+                {
+                  "type": "paragraph",
+                  "text": "Each board is a canvas for expression, crafted for those who treat the backstreets as their own art gallery.",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "button": {
+                "link_type": "Any",
+                "key": "0c614c97-f94e-47b2-a16f-8c666e4c61ec",
+                "text": "Shop Boards"
+              },
+              "bg_img": {
+                "dimensions": {
+                  "width": 880,
+                  "height": 1080
+                },
+                "alt": null,
+                "copyright": null,
+                "url": "https://images.prismic.io/suburbia-solo/aLfcvmGNHVfTOjMX_paint-background.png?auto=format,compress",
+                "id": "aLfcvmGNHVfTOjMX",
+                "edit": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 1,
+                  "background": "transparent"
+                }
+              },
+              "foregroundimg": {
+                "dimensions": {
+                  "width": 2987,
+                  "height": 4063
+                },
+                "alt": null,
+                "copyright": null,
+                "url": "https://images.prismic.io/suburbia-solo/aLfc1GGNHVfTOjMs_guy-2.png?auto=format,compress",
+                "id": "aLfc1GGNHVfTOjMs",
+                "edit": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 1,
+                  "background": "transparent"
+                }
+              }
+            },
+            "id": "text_and_image$03a06eba-1e66-4796-b87c-026dbca25b99",
+            "slice_type": "text_and_image",
+            "slice_label": null
+          },
+          {
+            "variation": "default",
+            "version": "initial",
+            "items": [],
+            "primary": {
+              "theme": "Lime",
+              "heading": [
+                {
+                  "type": "heading2",
+                  "text": "Built for Hard Landings",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "body": [
+                {
+                  "type": "paragraph",
+                  "text": "Skateboarding isn’t always smooth. Our boards are built tough to survive the scuffs, scratches, and slams that come with real skating.",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "button": {
+                "link_type": "Web",
+                "key": "3b9efe0b-50e3-4dcd-9d9a-c93d9fe553e0",
+                "url": "/",
+                "text": "Shop Boards"
+              },
+              "bg_img": {
+                "dimensions": {
+                  "width": 880,
+                  "height": 1080
+                },
+                "alt": null,
+                "copyright": null,
+                "url": "https://images.prismic.io/suburbia-solo/aLfcvmGNHVfTOjMX_paint-background.png?auto=format,compress",
+                "id": "aLfcvmGNHVfTOjMX",
+                "edit": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 1,
+                  "background": "transparent"
+                }
+              },
+              "foregroundimg": {
+                "dimensions": {
+                  "width": 3167,
+                  "height": 3273
+                },
+                "alt": null,
+                "copyright": null,
+                "url": "https://images.prismic.io/suburbia-solo/aLfc1WGNHVfTOjMt_guy-3.png?auto=format,compress",
+                "id": "aLfc1WGNHVfTOjMt",
+                "edit": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 1,
+                  "background": "transparent"
+                }
+              }
+            },
+            "id": "text_and_image$9c9072f0-9f48-43e7-9db2-5269b3ded4f4",
+            "slice_type": "text_and_image",
+            "slice_label": null
+          },
+          {
+            "variation": "imgOnLeft",
+            "version": "initial",
+            "items": [],
+            "primary": {
+              "theme": "Navy",
+              "heading": [
+                {
+                  "type": "heading2",
+                  "text": "Fueling the Next Generation",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "body": [
+                {
+                  "type": "paragraph",
+                  "text": "We’re committed to supporting young skaters and DIY projects, giving back to the communities that keep skateboarding alive and evolving.",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ],
+              "button": {
+                "link_type": "Any",
+                "key": "481a5a08-ead0-43dc-ad49-1a7bca22c1ae",
+                "text": "Shop Boards"
+              },
+              "bg_img": {
+                "dimensions": {
+                  "width": 880,
+                  "height": 1080
+                },
+                "alt": null,
+                "copyright": null,
+                "url": "https://images.prismic.io/suburbia-solo/aLfcvmGNHVfTOjMX_paint-background.png?auto=format,compress",
+                "id": "aLfcvmGNHVfTOjMX",
+                "edit": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 1,
+                  "background": "transparent"
+                }
+              },
+              "foregroundimg": {
+                "dimensions": {
+                  "width": 1846,
+                  "height": 2362
+                },
+                "alt": null,
+                "copyright": null,
+                "url": "https://images.prismic.io/suburbia-solo/aLfc12GNHVfTOjMu_guy-4.png?auto=format,compress",
+                "id": "aLfc12GNHVfTOjMu",
+                "edit": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 1,
+                  "background": "transparent"
+                }
+              }
+            },
+            "id": "text_and_image$516f7032-9c18-4de5-ba8e-49577b6b8151",
+            "slice_type": "text_and_image",
+            "slice_label": null
+          },
+          {
+            "variation": "default",
+            "version": "initial",
+            "items": [],
+            "primary": {
+              "youtube_video_id": "44I29krtxaw"
+            },
+            "id": "video_block$bfc993bb-0eaa-4b01-a36a-7356e21ded7d",
+            "slice_type": "video_block",
+            "slice_label": null
+          },
+          {
+            "variation": "default",
+            "version": "initial",
+            "items": [],
+            "primary": {
+              "heading": [
+                {
+                  "type": "heading2",
+                  "text": "The Team",
+                  "spans": [],
+                  "direction": "ltr"
+                }
+              ]
+            },
+            "id": "team_grid$3caecc59-e5bc-4a04-8de5-466c437057a7",
+            "slice_type": "team_grid",
+            "slice_label": null
+          }
+        ],
+        "meta_title": "Suburbia.Skateboards",
+        "meta_description": null,
+        "meta_image": {}
+      }
+    },
+    {
+      "id": "aLjivxIAACIA5jSs",
+      "uid": null,
+      "url": null,
+      "type": "settings",
+      "href": "https://suburbia-solo.cdn.prismic.io/api/v2/documents/search?ref=aLp94xEAACIAfTKo&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22aLjivxIAACIA5jSs%22%29+%5D%5D",
+      "tags": [],
+      "first_publication_date": "2025-09-04T00:52:19+0000",
+      "last_publication_date": "2025-09-05T06:06:27+0000",
+      "slugs": [
+        "settings"
+      ],
+      "linked_documents": [],
+      "lang": "en-us",
+      "alternate_languages": [],
+      "data": {
+        "site_title": "Suburbia Skateboards",
+        "meta_description": "The best skateboards",
+        "fallback_og_image": {
+          "dimensions": {
+            "width": 1200,
+            "height": 630
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfc4GGNHVfTOjM4_Suburbia-OG.png?auto=format,compress",
+          "id": "aLfc4GGNHVfTOjM4",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "navigation": [
+          {
+            "link": {
+              "link_type": "Web",
+              "key": "25286bd2-773b-4d40-a1cd-a8aba2fcb5d4",
+              "url": "/",
+              "text": "Team"
+            }
+          },
+          {
+            "link": {
+              "link_type": "Web",
+              "key": "a7b7ede2-5c70-46dc-97d8-f50443a6c22d",
+              "url": "/build",
+              "text": "Customizer"
+            }
+          },
+          {
+            "link": {
+              "link_type": "Web",
+              "key": "9a34afa8-3353-43ec-a68e-14d4f08e5f46",
+              "url": "/",
+              "text": "About"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "aLjndhIAACEA5jtP",
+      "uid": "oni-mask",
+      "url": null,
+      "type": "skateboard",
+      "href": "https://suburbia-solo.cdn.prismic.io/api/v2/documents/search?ref=aLp94xEAACIAfTKo&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22aLjndhIAACEA5jtP%22%29+%5D%5D",
+      "tags": [],
+      "first_publication_date": "2025-09-04T01:12:38+0000",
+      "last_publication_date": "2025-09-04T01:12:38+0000",
+      "slugs": [
+        "oni-mask"
+      ],
+      "linked_documents": [],
+      "lang": "en-us",
+      "alternate_languages": [],
+      "data": {
+        "name": "Oni Mask",
+        "image": {
+          "dimensions": {
+            "width": 475,
+            "height": 1697
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfcvWGNHVfTOjMW_onimask-complete.png?auto=format,compress",
+          "id": "aLfcvWGNHVfTOjMW",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "price": 5999,
+        "customizer_link": {
+          "link_type": "Any"
+        }
+      }
+    },
+    {
+      "id": "aLkggBIAAB8A5o9z",
+      "uid": "red--black",
+      "url": null,
+      "type": "skateboard",
+      "href": "https://suburbia-solo.cdn.prismic.io/api/v2/documents/search?ref=aLp94xEAACIAfTKo&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22aLkggBIAAB8A5o9z%22%29+%5D%5D",
+      "tags": [],
+      "first_publication_date": "2025-09-04T05:16:26+0000",
+      "last_publication_date": "2025-09-04T05:20:15+0000",
+      "slugs": [
+        "red--black"
+      ],
+      "linked_documents": [],
+      "lang": "en-us",
+      "alternate_languages": [],
+      "data": {
+        "name": "Red & Black",
+        "image": {
+          "dimensions": {
+            "width": 475,
+            "height": 1694
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfc3WGNHVfTOjM1_red-black-complete.png?auto=format,compress",
+          "id": "aLfc3WGNHVfTOjM1",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "price": 5999,
+        "customizer_link": {
+          "link_type": "Any"
+        }
+      }
+    },
+    {
+      "id": "aLkgoBIAACAA5o-l",
+      "uid": "green-navy",
+      "url": null,
+      "type": "skateboard",
+      "href": "https://suburbia-solo.cdn.prismic.io/api/v2/documents/search?ref=aLp94xEAACIAfTKo&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22aLkgoBIAACAA5o-l%22%29+%5D%5D",
+      "tags": [],
+      "first_publication_date": "2025-09-04T05:16:19+0000",
+      "last_publication_date": "2025-09-04T05:20:25+0000",
+      "slugs": [
+        "green-navy"
+      ],
+      "linked_documents": [],
+      "lang": "en-us",
+      "alternate_languages": [],
+      "data": {
+        "name": "Green Navy",
+        "image": {
+          "dimensions": {
+            "width": 476,
+            "height": 1696
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfc0WGNHVfTOjMp_green-navy-complete.png?auto=format,compress",
+          "id": "aLfc0WGNHVfTOjMp",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "price": 5999,
+        "customizer_link": {
+          "link_type": "Any",
+          "key": "343400a0-7845-49bb-82d9-57e2c8495649"
+        }
+      }
+    },
+    {
+      "id": "aLkgXhIAACEA5o9A",
+      "uid": "pink-drop",
+      "url": null,
+      "type": "skateboard",
+      "href": "https://suburbia-solo.cdn.prismic.io/api/v2/documents/search?ref=aLp94xEAACIAfTKo&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22aLkgXhIAACEA5o9A%22%29+%5D%5D",
+      "tags": [],
+      "first_publication_date": "2025-09-04T05:16:30+0000",
+      "last_publication_date": "2025-09-04T05:20:36+0000",
+      "slugs": [
+        "pink-drop"
+      ],
+      "linked_documents": [],
+      "lang": "en-us",
+      "alternate_languages": [],
+      "data": {
+        "name": "Pink Drop",
+        "image": {
+          "dimensions": {
+            "width": 475,
+            "height": 1692
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfc2mGNHVfTOjMy_pink-drop-complete.png?auto=format,compress",
+          "id": "aLfc2mGNHVfTOjMy",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "price": 5999,
+        "customizer_link": {
+          "link_type": "Any"
+        }
+      }
+    },
+    {
+      "id": "aLp0fxEAACEAfSSA",
+      "uid": "dylan",
+      "url": null,
+      "type": "skater",
+      "href": "https://suburbia-solo.cdn.prismic.io/api/v2/documents/search?ref=aLp94xEAACIAfTKo&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22aLp0fxEAACEAfSSA%22%29+%5D%5D",
+      "tags": [],
+      "first_publication_date": "2025-09-05T05:26:26+0000",
+      "last_publication_date": "2025-09-05T05:26:26+0000",
+      "slugs": [
+        "dylan"
+      ],
+      "linked_documents": [],
+      "lang": "en-us",
+      "alternate_languages": [],
+      "data": {
+        "first_name": "Dylan",
+        "last_name": "Banks",
+        "photo_bg": {
+          "dimensions": {
+            "width": 900,
+            "height": 1218
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfczGGNHVfTOjMk_dylan-back.png?auto=format,compress",
+          "id": "aLfczGGNHVfTOjMk",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "photo_fg": {
+          "dimensions": {
+            "width": 900,
+            "height": 1218
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfczWGNHVfTOjMl_dylan-front.png?auto=format,compress",
+          "id": "aLfczWGNHVfTOjMl",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "customizer_link": {
+          "link_type": "Any",
+          "key": "5f9f4a35-80c3-43b6-9d61-07dc586be153",
+          "text": "Build Their Board"
+        }
+      }
+    },
+    {
+      "id": "aLp0oxEAACEAfSS7",
+      "uid": "carter",
+      "url": null,
+      "type": "skater",
+      "href": "https://suburbia-solo.cdn.prismic.io/api/v2/documents/search?ref=aLp94xEAACIAfTKo&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22aLp0oxEAACEAfSS7%22%29+%5D%5D",
+      "tags": [],
+      "first_publication_date": "2025-09-05T05:27:02+0000",
+      "last_publication_date": "2025-09-05T05:27:02+0000",
+      "slugs": [
+        "carter"
+      ],
+      "linked_documents": [],
+      "lang": "en-us",
+      "alternate_languages": [],
+      "data": {
+        "first_name": "Carter",
+        "last_name": "Jones",
+        "photo_bg": {
+          "dimensions": {
+            "width": 900,
+            "height": 1218
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfcy2GNHVfTOjMj_carter-back.png?auto=format,compress",
+          "id": "aLfcy2GNHVfTOjMj",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "photo_fg": {
+          "dimensions": {
+            "width": 900,
+            "height": 1218
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfcumGNHVfTOjMT_carter-front.png?auto=format,compress",
+          "id": "aLfcumGNHVfTOjMT",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "customizer_link": {
+          "link_type": "Any",
+          "key": "ab948f1c-d08a-4694-b71e-b0aa42ab91aa",
+          "text": "Build Their Board"
+        }
+      }
+    },
+    {
+      "id": "aLp0QhEAACEAfSQX",
+      "uid": "jordan",
+      "url": null,
+      "type": "skater",
+      "href": "https://suburbia-solo.cdn.prismic.io/api/v2/documents/search?ref=aLp94xEAACIAfTKo&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22aLp0QhEAACEAfSQX%22%29+%5D%5D",
+      "tags": [],
+      "first_publication_date": "2025-09-05T05:25:33+0000",
+      "last_publication_date": "2025-09-05T05:25:33+0000",
+      "slugs": [
+        "jordan"
+      ],
+      "linked_documents": [],
+      "lang": "en-us",
+      "alternate_languages": [],
+      "data": {
+        "first_name": "Jordan",
+        "last_name": "Sparks",
+        "photo_bg": {
+          "dimensions": {
+            "width": 900,
+            "height": 1218
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfc12GNHVfTOjMv_jordan-back.png?auto=format,compress",
+          "id": "aLfc12GNHVfTOjMv",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "photo_fg": {
+          "dimensions": {
+            "width": 900,
+            "height": 1218
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfcvGGNHVfTOjMV_jordan-front.png?auto=format,compress",
+          "id": "aLfcvGGNHVfTOjMV",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "customizer_link": {
+          "link_type": "Web",
+          "key": "ceddd171-0f5f-4526-b31c-238b3ae7e452",
+          "url": "/",
+          "text": "Build Their Board"
+        }
+      }
+    },
+    {
+      "id": "aLpAFxEAACEAfNIG",
+      "uid": "sophie",
+      "url": null,
+      "type": "skater",
+      "href": "https://suburbia-solo.cdn.prismic.io/api/v2/documents/search?ref=aLp94xEAACIAfTKo&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22aLpAFxEAACEAfNIG%22%29+%5D%5D",
+      "tags": [],
+      "first_publication_date": "2025-09-05T01:44:39+0000",
+      "last_publication_date": "2025-09-05T01:44:39+0000",
+      "slugs": [
+        "sophie"
+      ],
+      "linked_documents": [],
+      "lang": "en-us",
+      "alternate_languages": [],
+      "data": {
+        "first_name": "Sophie",
+        "last_name": "Castillo",
+        "photo_bg": {
+          "dimensions": {
+            "width": 900,
+            "height": 1218
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfc3mGNHVfTOjM2_sophie-back.png?auto=format,compress",
+          "id": "aLfc3mGNHVfTOjM2",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "photo_fg": {
+          "dimensions": {
+            "width": 900,
+            "height": 1218
+          },
+          "alt": null,
+          "copyright": null,
+          "url": "https://images.prismic.io/suburbia-solo/aLfc32GNHVfTOjM3_sophie-front.png?auto=format,compress",
+          "id": "aLfc32GNHVfTOjM3",
+          "edit": {
+            "x": 0,
+            "y": 0,
+            "zoom": 1,
+            "background": "transparent"
+          }
+        },
+        "customizer_link": {
+          "link_type": "Any"
+        }
+      }
+    }
+  ]
+}

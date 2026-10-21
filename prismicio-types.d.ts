@@ -272,6 +272,40 @@ interface SkateboardDocumentData {
     prismic.FieldState,
     never
   >;
+
+  /**
+   * Description field in *Skateboard*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: One or two sentences for the product page and search results
+   * - **API ID Path**: skateboard.description
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  description: prismic.RichTextField;
+
+  /**
+   * Customizer deck field in *Skateboard*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: Deck graphic this board opens with in the builder
+   * - **API ID Path**: skateboard.deck_id
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  deck_id: prismic.SelectField<
+    | "thank-you"
+    | "oni-mask"
+    | "pink-swirl"
+    | "red-black"
+    | "green-navy"
+    | "yellow-black"
+    | "black-yellow"
+    | "red-white"
+    | "gray-black"
+    | "grid-streaks"
+    | "against-the-tide"
+  >;
 }
 
 /**

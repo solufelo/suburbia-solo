@@ -1,8 +1,9 @@
 /**
  * Prismic Client Configuration
- * 
+ *
  * Centralized setup for Prismic CMS integration with Next.js
- * Handles environment detection, caching, and preview mode
+ * Handles environment detection, caching, preview mode and the local fixture
+ * fallback (see ./prismic-fixtures.ts).
  */
 
 import {
@@ -12,6 +13,7 @@ import {
 } from "@prismicio/client";
 import { enableAutoPreviews } from "@prismicio/next";
 import sm from "../../slicemachine.config.json";
+import { fixtureFetch, resilientFetch } from "./prismic-fixtures";
 
 /**
  * Repository name - uses environment variable or falls back to config
@@ -20,37 +22,38 @@ import sm from "../../slicemachine.config.json";
 export const repositoryName =
   process.env.NEXT_PUBLIC_PRISMIC_ENVIRONMENT || sm.repositoryName;
 
+/** True when the site reads content from src/fixtures instead of Prismic. */
+export const usingFixtures = process.env.PRISMIC_FIXTURES === "1";
+
 /**
  * Route resolver configuration
  * Maps Prismic document types to URL paths
- * Add routes here as you create new page types
  */
 const routes: Route[] = [
-  // Example routes:
-  // { type: "homepage", path: "/" },
-  // { type: "page", path: "/:uid" },
+  { type: "homepage", path: "/" },
+  { type: "skateboard", path: "/boards/:uid" },
 ];
 
 /**
  * Creates a configured Prismic client
- * 
+ *
  * @param config - Optional client configuration overrides
  * @returns Configured Prismic client with caching and preview support
  */
 export const createClient = (config: ClientConfig = {}) => {
   const client = baseCreateClient(repositoryName, {
     routes,
+    accessToken: process.env.PRISMIC_ACCESS_TOKEN || undefined,
+    fetch: usingFixtures ? fixtureFetch : resilientFetch,
     fetchOptions:
       process.env.NODE_ENV === "production"
-        ? { next: { tags: ["prismic"] }, cache: "force-cache" }  // Production: cache forever
-        : { next: { revalidate: 5 } },                           // Development: revalidate every 5s
+        ? { next: { tags: ["prismic"] }, cache: "force-cache" } // Production: cache until revalidated
+        : { next: { revalidate: 5 } }, // Development: revalidate every 5s
     ...config,
   });
 
   // Enable preview mode for draft content
-  enableAutoPreviews({ client });
+  if (!usingFixtures) enableAutoPreviews({ client });
 
   return client;
 };
-
-
