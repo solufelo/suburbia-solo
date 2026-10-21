@@ -4,9 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:fixtures": "node scripts/with-env.mjs PRISMIC_FIXTURES=1 -- next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "textures": "python scripts/build-textures.py",
+    "model": "node scripts/pack-glb.mjs",
+    "snapshot:prismic": "node scripts/snapshot-prismic.mjs",
     "slicemachine": "start-slicemachine"
   },
   "dependencies": {
@@ -25,10 +32,12 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-icons": "^4.12.0",
-    "three": "^0.180.0"
+    "three": "^0.180.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.56.1",
     "@slicemachine/adapter-next": "^0.3.83",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -39,6 +48,7 @@
     "eslint-config-next": "15.5.2",
     "slice-machine-ui": "^2.18.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }
